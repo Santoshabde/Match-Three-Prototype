@@ -25,6 +25,7 @@ public class DevTestingScript : MonoBehaviour
     [ContextMenu("Find Match")]
     public void FindMatch()
     {
+        ResetTilesColor();
         var result = ServiceRegistry.Get<M3_Service_BoardMatcher>().IdentifyPossibleHorizontalMatches(xToStartMatchFinding, yToStartMatchFinding);
         foreach (var item in result)
         {
@@ -35,6 +36,7 @@ public class DevTestingScript : MonoBehaviour
     [ContextMenu("Full Board HorizontalMatch")]
     public void FullBoardHorizontalMatch()
     {
+        ResetTilesColor();
         for (int x = 0; x < ServiceRegistry.Get<M3_Service_BoardData>().GetTilesOnBoard().GetLength(0); x++)
         {
             for (int y = 0; y < ServiceRegistry.Get<M3_Service_BoardData>().GetTilesOnBoard().GetLength(1); y++)
@@ -51,6 +53,7 @@ public class DevTestingScript : MonoBehaviour
     [ContextMenu("Full Board Vertical Match")]
     public void FullBoardVerticalMatch()
     {
+        ResetTilesColor();
         for (int x = 0; x < ServiceRegistry.Get<M3_Service_BoardData>().GetTilesOnBoard().GetLength(0); x++)
         {
             for (int y = 0; y < ServiceRegistry.Get<M3_Service_BoardData>().GetTilesOnBoard().GetLength(1); y++)
@@ -58,7 +61,7 @@ public class DevTestingScript : MonoBehaviour
                 var result = ServiceRegistry.Get<M3_Service_BoardMatcher>().IdentifyPossibleVerticalMatches(x, y);
                 foreach (var item in result)
                 {
-                    item.CurrentGamePieceTile.gameObject.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0.3f);
+                    item.CurrentGamePieceTile.gameObject.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0.3f); //0.09411765
                 }
             }
         }
@@ -67,6 +70,7 @@ public class DevTestingScript : MonoBehaviour
     [ContextMenu("All Matches")]
     public void AllMatches()
     {
+        ResetTilesColor();
         for (int x = 0; x < ServiceRegistry.Get<M3_Service_BoardData>().GetTilesOnBoard().GetLength(0); x++)
         {
             for (int y = 0; y < ServiceRegistry.Get<M3_Service_BoardData>().GetTilesOnBoard().GetLength(1); y++)
@@ -76,6 +80,17 @@ public class DevTestingScript : MonoBehaviour
                 {
                     item.CurrentGamePieceTile.gameObject.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0.3f);
                 }
+            }
+        }
+    }
+
+    private void ResetTilesColor()
+    {
+        for (int x = 0; x < ServiceRegistry.Get<M3_Service_BoardData>().GetTilesOnBoard().GetLength(0); x++)
+        {
+            for (int y = 0; y < ServiceRegistry.Get<M3_Service_BoardData>().GetTilesOnBoard().GetLength(1); y++)
+            {
+                ServiceRegistry.Get<M3_Service_BoardData>().GetTilesOnBoard()[x, y].GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0.09411765f);
             }
         }
     }

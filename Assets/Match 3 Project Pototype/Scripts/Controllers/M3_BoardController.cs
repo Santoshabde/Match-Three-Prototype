@@ -52,6 +52,7 @@ namespace SNGames.M3
                 }
             }
 
+            AssignTilesNeighbour(tilesOnBoard);
             SetCameraPositionAndFOVBasedOnBoardSize();
 
             ServiceRegistry.Get<M3_Service_BoardData>().SetTilesOnBoard(tilesOnBoard);
@@ -80,6 +81,40 @@ namespace SNGames.M3
         #endregion
 
         #region  Private Region
+
+        private void AssignTilesNeighbour(M3_Tile[,] tilesOnBoard)
+        {
+            for (int i = 0; i < width; i++)
+            {
+                for (int j = 0; j < height; j++)
+                {
+                    //-- Calculate neighbour for each tilesOnBoard[i,j] (4 directions)-- 
+                    List<M3_Tile> neighbourTiles = new List<M3_Tile>();
+
+                    if (i > 0)
+                    {
+                        neighbourTiles.Add(tilesOnBoard[i - 1, j]);
+                    }
+
+                    if (i < width - 1)
+                    {
+                        neighbourTiles.Add(tilesOnBoard[i + 1, j]);
+                    }
+
+                    if (j > 0)
+                    {
+                        neighbourTiles.Add(tilesOnBoard[i, j - 1]);
+                    }
+
+                    if (j < height - 1)
+                    {
+                        neighbourTiles.Add(tilesOnBoard[i, j + 1]);
+                    }
+
+                    tilesOnBoard[i, j].SetNeighbourTiles(neighbourTiles);
+                }
+            }
+        }
 
         private void SetCameraPositionAndFOVBasedOnBoardSize()
         {

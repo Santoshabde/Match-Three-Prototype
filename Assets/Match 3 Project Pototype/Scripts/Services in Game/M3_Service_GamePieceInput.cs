@@ -38,45 +38,50 @@ namespace SNGames.M3
                 {
                     hoveredTile = tile;
 
-                    if (hoveredTile != clickedTile)
+                    if (hoveredTile != clickedTile
+                     && clickedTile.NeighbourTiles.Contains(hoveredTile))
                     {
+                        int movedCount = 0;
                         hoveredTileMoved = false;
                         currentTileMoved = false;
 
-                        //Swapping
-                        Sequence tileSwapSeq = DOTween.Sequence();
-                        tileSwapSeq.AppendInterval(0.35f);
-                        tileSwapSeq.OnComplete(() =>
+                        clickedTile.TileGamePiece?.MovePieceToTile(hoveredTile, OnMoveComplete);
+                        hoveredTile.TileGamePiece?.MovePieceToTile(clickedTile, OnMoveComplete);
+
+                        void OnMoveComplete()
                         {
-                            var tempClickedTileGamePiece = clickedTile.TileGamePiece;
-
-                            clickedTile.SetTileGamePiece(hoveredTile.TileGamePiece);
-                            hoveredTile.SetTileGamePiece(tempClickedTileGamePiece);
-
-                            clickedTile.TileGamePiece.SetTile(clickedTile);
-                            hoveredTile.TileGamePiece.SetTile(hoveredTile);
-
-                            currentTileMoved = true;
-                            hoveredTileMoved = true;
-
-                            clickedTile = null;
-                            hoveredTile = null;
-                        });
-
-                        clickedTile.TileGamePiece.MovePieceToTile(hoveredTile, () =>
-                        {
-
-                        });
-                        hoveredTile.TileGamePiece.MovePieceToTile(clickedTile, () =>
-                        {
-
-                        });
+                            movedCount++;
+                            // Ensure both moves are done before swapping
+                            if (movedCount >= 2)
+                            {
+                                SwapTiles();
+                            }
+                        }
                     }
                 }
-
-                //clickedTile = null;
-                //hoveredTile = null;
             }
+        }
+
+        private void SwapTiles()
+        {
+            if (clickedTile == null || hoveredTile == null) return;
+
+            ServiceRegistry.Get<M3_Service_BoardData>().SwapInBoardTilesData(clickedTile, hoveredTile);
+            ServiceRegistry.Get<M3_Service_BoardData>().SwapInBoardGamePiecesData(clickedTile.TileGamePiece, hoveredTile.TileGamePiece);
+
+            var tempGamePiece = clickedTile.TileGamePiece;
+
+            clickedTile.SetTileGamePiece(hoveredTile.TileGamePiece);
+            hoveredTile.SetTileGamePiece(tempGamePiece);
+
+            clickedTile.TileGamePiece?.SetTile(clickedTile);
+            hoveredTile.TileGamePiece?.SetTile(hoveredTile);
+
+            currentTileMoved = true;
+            hoveredTileMoved = true;
+
+            clickedTile = null;
+            hoveredTile = null;
         }
     }
 }
