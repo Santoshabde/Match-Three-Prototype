@@ -10,11 +10,16 @@ public class DevTestingScript : MonoBehaviour
     [SerializeField] private int xToStartMatchFinding;
     [SerializeField] private int yToStartMatchFinding;
 
+    void Start()
+    {
+        SpawnBoard();
+    }
+
     [ContextMenu("SpawnBoard")]
     public void SpawnBoard()
     {
         boardController.InitialSpawnBoardTiles();
-        boardController.InitialSpawnRandomGamePicesOnTheBoard();
+        boardController.InitialSpawnRandomGamePicesOnTheBoard(ServiceRegistry.Get<M3_Service_BoardData>().GetTilesOnBoard());
     }
 
     [ContextMenu("Find Match")]
@@ -37,7 +42,7 @@ public class DevTestingScript : MonoBehaviour
                 var result = ServiceRegistry.Get<M3_Service_BoardMatcher>().IdentifyPossibleHorizontalMatches(x, y);
                 foreach (var item in result)
                 {
-                    item.CurrentGamePieceTile.gameObject.GetComponent<SpriteRenderer>().color = new Color(0f, 0f, 0f, 0.3f);
+                    item.CurrentGamePieceTile.gameObject.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0.3f);
                 }
             }
         }
@@ -53,7 +58,7 @@ public class DevTestingScript : MonoBehaviour
                 var result = ServiceRegistry.Get<M3_Service_BoardMatcher>().IdentifyPossibleVerticalMatches(x, y);
                 foreach (var item in result)
                 {
-                    item.CurrentGamePieceTile.gameObject.GetComponent<SpriteRenderer>().color = new Color(0f, 0f, 0f, 0.3f);
+                    item.CurrentGamePieceTile.gameObject.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0.3f);
                 }
             }
         }
@@ -69,7 +74,7 @@ public class DevTestingScript : MonoBehaviour
                 var result = ServiceRegistry.Get<M3_Service_BoardMatcher>().IdentifyPossibleMatches(x, y);
                 foreach (var item in result)
                 {
-                    item.CurrentGamePieceTile.gameObject.GetComponent<SpriteRenderer>().color = new Color(0f, 0f, 0f, 0.3f);
+                    item.CurrentGamePieceTile.gameObject.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0.3f);
                 }
             }
         }

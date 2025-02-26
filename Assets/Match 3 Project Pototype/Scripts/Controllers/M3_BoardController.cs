@@ -27,15 +27,18 @@ namespace SNGames.M3
         [SerializeField] private int width;
         [SerializeField] private int height;
 
-        private M3_Tile[,] tilesOnBoard;
-        private M3_GamePiece[,] gamePiecesOnBoard;
+        void OnDestroy()
+        {
+            ClearExistingTilesInGame();
+            ClearExistingGamePiecesInGame();
+        }
 
         #region  Public Region
         public void InitialSpawnBoardTiles()
         {
             ClearExistingTilesInGame();
 
-            tilesOnBoard = new M3_Tile[width, height];
+            var tilesOnBoard = new M3_Tile[width, height];
             for (int x = 0; x < width; x++)
             {
                 for (int y = 0; y < height; y++)
@@ -43,6 +46,9 @@ namespace SNGames.M3
                     M3_Tile tile = Instantiate(tilePrefab, new Vector3(x, y, 0), Quaternion.identity, transform);
                     tile.Init(x, y, null);
                     tilesOnBoard[x, y] = tile;
+
+                    tile.OnTileClicked += ServiceRegistry.Get<M3_Service_GamePieceInput>().OnTileClicked;
+                    tile.OnTileHovered += ServiceRegistry.Get<M3_Service_GamePieceInput>().OnTileHovered;
                 }
             }
 
@@ -51,9 +57,11 @@ namespace SNGames.M3
             ServiceRegistry.Get<M3_Service_BoardData>().SetTilesOnBoard(tilesOnBoard);
         }
 
-        public void InitialSpawnRandomGamePicesOnTheBoard()
+        public void InitialSpawnRandomGamePicesOnTheBoard(M3_Tile[,] tilesOnBoard)
         {
-            gamePiecesOnBoard = new M3_GamePiece[width, height];
+            ClearExistingGamePiecesInGame();
+
+            var gamePiecesOnBoard = new M3_GamePiece[width, height];
             for (int x = 0; x < width; x++)
             {
                 for (int y = 0; y < height; y++)
@@ -80,6 +88,7 @@ namespace SNGames.M3
 
         private void ClearExistingTilesInGame()
         {
+            var tilesOnBoard = ServiceRegistry.Get<M3_Service_BoardData>().GetTilesOnBoard();
             if (tilesOnBoard == null)
             {
                 return;
@@ -91,7 +100,30 @@ namespace SNGames.M3
                 {
                     if (tilesOnBoard[x, y] != null)
                     {
-                        Destroy(tilesOnBoard[x, y].gameObject);
+                        tilesOnBoard[x, y].OnTileClicked -= ServiceRegistry.Get<M3_Service_GamePieceInput>().OnTileClicked;
+                        tilesOnBoard[x, y].OnTileHovered -= ServiceRegistry.Get<M3_Service_GamePieceInput>().OnTileHovered;
+
+                        DestroyImmediate(tilesOnBoard[x, y].gameObject);
+                    }
+                }
+            }
+        }
+
+        private void ClearExistingGamePiecesInGame()
+        {
+            var gamePiecesOnBoard = ServiceRegistry.Get<M3_Service_BoardData>().GetGamePiecesOnBoard();
+            if (gamePiecesOnBoard == null)
+            {
+                return;
+            }
+
+            for (int x = 0; x < gamePiecesOnBoard.GetLength(0); x++)
+            {
+                for (int y = 0; y < gamePiecesOnBoard.GetLength(1); y++)
+                {
+                    if (gamePiecesOnBoard[x, y] != null)
+                    {
+                        DestroyImmediate(gamePiecesOnBoard[x, y].gameObject);
                     }
                 }
             }

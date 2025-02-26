@@ -520,7 +520,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mainGameCamera: {fileID: 519420031}
-  cameraFOVDecisionOffset: 12
+  cameraFOVDecisionOffset: 2
 --- !u!1 &1987232262
 GameObject:
   m_ObjectHideFlags: 0

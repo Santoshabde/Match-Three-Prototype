@@ -10,6 +10,7 @@ namespace SNGames.M3
             //Bind all services
             BindService(new M3_Service_BoardData());
             BindService(new M3_Service_BoardMatcher());
+            BindService(new M3_Service_GamePieceInput());
         }
     }
 }
