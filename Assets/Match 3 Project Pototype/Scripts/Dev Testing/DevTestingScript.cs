@@ -37,7 +37,7 @@ public class DevTestingScript : MonoBehaviour
                 var result = ServiceRegistry.Get<M3_Service_BoardMatcher>().IdentifyPossibleHorizontalMatches(x, y);
                 foreach (var item in result)
                 {
-                    item.CurrentGamePieceTile.gameObject.GetComponent<SpriteRenderer>().color = new Color(0f, 0f, 0.5f);
+                    item.CurrentGamePieceTile.gameObject.GetComponent<SpriteRenderer>().color = new Color(0f, 0f, 0f, 0.3f);
                 }
             }
         }
@@ -53,7 +53,7 @@ public class DevTestingScript : MonoBehaviour
                 var result = ServiceRegistry.Get<M3_Service_BoardMatcher>().IdentifyPossibleVerticalMatches(x, y);
                 foreach (var item in result)
                 {
-                    item.CurrentGamePieceTile.gameObject.GetComponent<SpriteRenderer>().color = new Color(0f, 0f, 0.5f);
+                    item.CurrentGamePieceTile.gameObject.GetComponent<SpriteRenderer>().color = new Color(0f, 0f, 0f, 0.3f);
                 }
             }
         }
@@ -66,18 +66,10 @@ public class DevTestingScript : MonoBehaviour
         {
             for (int y = 0; y < ServiceRegistry.Get<M3_Service_BoardData>().GetTilesOnBoard().GetLength(1); y++)
             {
-                var horizontalMatches = ServiceRegistry.Get<M3_Service_BoardMatcher>().IdentifyPossibleHorizontalMatches(x, y);
-                var verticalMatches = ServiceRegistry.Get<M3_Service_BoardMatcher>().IdentifyPossibleVerticalMatches(x, y);
-
-                // Use HashSet to remove duplicates and get the union of both lists
-                HashSet<M3_GamePiece> allMatches = new HashSet<M3_GamePiece>(horizontalMatches);
-                allMatches.UnionWith(verticalMatches);
-
-                // Convert back to a List if needed
-                List<M3_GamePiece> finalMatches = allMatches.ToList();
-                foreach (var item in finalMatches)
+                var result = ServiceRegistry.Get<M3_Service_BoardMatcher>().IdentifyPossibleMatches(x, y);
+                foreach (var item in result)
                 {
-                    item.CurrentGamePieceTile.gameObject.GetComponent<SpriteRenderer>().color = new Color(0f, 0f, 0.5f);
+                    item.CurrentGamePieceTile.gameObject.GetComponent<SpriteRenderer>().color = new Color(0f, 0f, 0f, 0.3f);
                 }
             }
         }
