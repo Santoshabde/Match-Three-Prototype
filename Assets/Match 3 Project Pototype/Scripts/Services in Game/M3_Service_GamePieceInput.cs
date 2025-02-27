@@ -6,8 +6,8 @@ namespace SNGames.M3
 {
     public class M3_Service_GamePieceInput : BaseService
     {
-        private bool currentTileMoved = true;
-        private bool hoveredTileMoved = true;
+        private bool currentTileIsStatic = true;
+        private bool hoveredTileIsStatic = true;
 
         private M3_Tile clickedTile;
         private M3_Tile hoveredTile;
@@ -32,50 +32,49 @@ namespace SNGames.M3
 
         public void OnTileHovered(M3_Tile tile)
         {
-            if (IsClickedAndHoveredGamePicesNOTInMovingState())
+            //Already some tiles are in moving state? or is clicked tile null?
+            if (!IsClickedAndHoveredGamePicesNOTInMovingState() || clickedTile == null) return;
+
+            //Hovered Tile should Not be same as clicked tile AND Hovered Tile should be a neighbour of clicked tile
+            hoveredTile = tile;
+            if (!CanInitiateSwapBtwClickedAndHoveredTile()) return;
+
+            //If code reaches here - that we are qualified to TRY swapping tiles
+            hoveredTileIsStatic = false;
+            currentTileIsStatic = false;
+
+            int movedCount = 0;
+            clickedTile.TileGamePiece?.MovePieceToTile(hoveredTile, OnMoveComplete);
+            hoveredTile.TileGamePiece?.MovePieceToTile(clickedTile, OnMoveComplete);
+
+            void OnMoveComplete()
             {
-                if (clickedTile != null)
+                movedCount++;
+                if (movedCount >= 2)
                 {
-                    hoveredTile = tile;
+                    SwapTilesLogicalData(clickedTile, hoveredTile);
 
-                    if (CanInitiateSwapBtwClickedAndHoveredTile())
+                    //After swapping tiles logical data - check if there are any possible matches which came up after swapping
+                    if (AreThereAnyPossibleMatchesWithClickedAndHoveredTilesSwapped())
                     {
-                        int movedCount = 0;
-                        hoveredTileMoved = false;
-                        currentTileMoved = false;
+                        ResetClickedAndHoveredTilesOnSettledState();
+                    }
+                    //If no? Then reset what you have swapped - swap back - both physically and logically
+                    else
+                    {
+                        clickedTile.TileGamePiece?.MovePieceToTile(hoveredTile);
+                        hoveredTile.TileGamePiece?.MovePieceToTile(clickedTile);
 
-                        clickedTile.TileGamePiece?.MovePieceToTile(hoveredTile, OnMoveComplete);
-                        hoveredTile.TileGamePiece?.MovePieceToTile(clickedTile, OnMoveComplete);
+                        SwapTilesLogicalData(hoveredTile, clickedTile);
 
-                        void OnMoveComplete()
-                        {
-                            movedCount++;
-                            if (movedCount >= 2)
-                            {
-                                SwapTiles(clickedTile, hoveredTile);
-
-                                if (AreThereAnyPossibleMatchesWithClickedAndHoveredTilesSwapped())
-                                {
-                                    ResetClickedAndHoveredTilesOnSettledState();
-                                }
-                                else
-                                {
-                                    clickedTile.TileGamePiece?.MovePieceToTile(hoveredTile);
-                                    hoveredTile.TileGamePiece?.MovePieceToTile(clickedTile);
-
-                                    SwapTiles(hoveredTile, clickedTile);
-
-                                    //TODO: San
-                                    ResetClickedAndHoveredTilesOnSettledState();
-                                }
-                            }
-                        }
+                        //TODO: San
+                        ResetClickedAndHoveredTilesOnSettledState();
                     }
                 }
             }
         }
 
-        private void SwapTiles(M3_Tile tile1, M3_Tile tile2)
+        private void SwapTilesLogicalData(M3_Tile tile1, M3_Tile tile2)
         {
             //3 Things to keep in mind while swapping tiles
             // 1. Need to swap positions of the game pieces - visual thing
@@ -90,7 +89,7 @@ namespace SNGames.M3
 
             //3. Need to update the tile reference in the game piece & vice versa - logical thing
             var tempGamePiece = tile1.TileGamePiece;
-            
+
             tile1.SetTileGamePiece(tile2.TileGamePiece);
             tile2.SetTileGamePiece(tempGamePiece);
 
@@ -100,7 +99,7 @@ namespace SNGames.M3
 
         private bool IsClickedAndHoveredGamePicesNOTInMovingState()
         {
-            return currentTileMoved && hoveredTileMoved;
+            return currentTileIsStatic && hoveredTileIsStatic;
         }
 
         private bool CanInitiateSwapBtwClickedAndHoveredTile()
@@ -122,8 +121,8 @@ namespace SNGames.M3
 
         private void ResetClickedAndHoveredTilesOnSettledState()
         {
-            currentTileMoved = true;
-            hoveredTileMoved = true;
+            currentTileIsStatic = true;
+            hoveredTileIsStatic = true;
 
             clickedTile = null;
             hoveredTile = null;
