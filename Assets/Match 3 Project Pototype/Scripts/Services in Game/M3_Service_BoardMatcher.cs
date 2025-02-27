@@ -29,6 +29,16 @@ namespace SNGames.M3
             return IdentifyPossibleMatches(tile.BoardPosition.x, tile.BoardPosition.y);
         }
 
+        public bool HavePossibleMatches(M3_Tile tile)
+        {
+            return IdentifyPossibleMatches(tile).Count > 0;
+        }
+
+        public bool HavePossibleMatches(int xPos, int yPos)
+        {
+            return IdentifyPossibleMatches(xPos, yPos).Count > 0;
+        }
+
         public List<M3_GamePiece> IdentifyPossibleMatches(int xPos, int yPos)
         {
             var possibleHorizontalMatches = IdentifyPossibleHorizontalMatches(xPos, yPos);

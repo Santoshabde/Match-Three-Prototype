@@ -101,12 +101,12 @@ public class DevTestingScript : SerializeSingleton<DevTestingScript>
 
         foreach (var item in matches1)
         {
-            item.CurrentGamePieceTile.gameObject.GetComponent<SpriteRenderer>().color = Color.red;
+            item.CurrentGamePieceTile.gameObject.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0.3f);
         }
 
         foreach (var item in matches2)
         {
-            item.CurrentGamePieceTile.gameObject.GetComponent<SpriteRenderer>().color = Color.red;
+            item.CurrentGamePieceTile.gameObject.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0.3f);
         }
     }
 }
