@@ -24,6 +24,11 @@ namespace SNGames.M3
 
         }
 
+        public List<M3_GamePiece> IdentifyPossibleMatches(M3_Tile tile)
+        {
+            return IdentifyPossibleMatches(tile.BoardPosition.x, tile.BoardPosition.y);
+        }
+
         public List<M3_GamePiece> IdentifyPossibleMatches(int xPos, int yPos)
         {
             var possibleHorizontalMatches = IdentifyPossibleHorizontalMatches(xPos, yPos);

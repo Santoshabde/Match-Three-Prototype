@@ -4,7 +4,7 @@ using SNGames.CommonModule;
 using SNGames.M3;
 using UnityEngine;
 
-public class DevTestingScript : MonoBehaviour
+public class DevTestingScript : SerializeSingleton<DevTestingScript>
 {
     [SerializeField] private M3_BoardController boardController;
     [SerializeField] private int xToStartMatchFinding;
@@ -92,6 +92,21 @@ public class DevTestingScript : MonoBehaviour
             {
                 ServiceRegistry.Get<M3_Service_BoardData>().GetTilesOnBoard()[x, y].GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0.09411765f);
             }
+        }
+    }
+
+    public void HighlightCurrentMatches(List<M3_GamePiece> matches1, List<M3_GamePiece> matches2)
+    {
+        ResetTilesColor();
+
+        foreach (var item in matches1)
+        {
+            item.CurrentGamePieceTile.gameObject.GetComponent<SpriteRenderer>().color = Color.red;
+        }
+
+        foreach (var item in matches2)
+        {
+            item.CurrentGamePieceTile.gameObject.GetComponent<SpriteRenderer>().color = Color.red;
         }
     }
 }

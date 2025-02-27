@@ -54,7 +54,35 @@ namespace SNGames.M3
                             // Ensure both moves are done before swapping
                             if (movedCount >= 2)
                             {
-                                SwapTiles();
+                                SwapTiles(clickedTile, hoveredTile);
+
+                                var possibleClickedTileMatches = ServiceRegistry.Get<M3_Service_BoardMatcher>().IdentifyPossibleMatches(clickedTile);
+                                var possibleHoveredTileMatches = ServiceRegistry.Get<M3_Service_BoardMatcher>().IdentifyPossibleMatches(hoveredTile);
+
+                                DevTestingScript.Instance.HighlightCurrentMatches(possibleClickedTileMatches, possibleHoveredTileMatches);
+
+                                if (possibleClickedTileMatches.Count > 0
+                                || possibleHoveredTileMatches.Count > 0)
+                                {
+                                    currentTileMoved = true;
+                                    hoveredTileMoved = true;
+
+                                    clickedTile = null;
+                                    hoveredTile = null;
+                                }
+                                else
+                                {
+                                    clickedTile.TileGamePiece?.MovePieceToTile(hoveredTile);
+                                    hoveredTile.TileGamePiece?.MovePieceToTile(clickedTile);
+
+                                    SwapTiles(hoveredTile, clickedTile);
+
+                                    currentTileMoved = true;
+                                    hoveredTileMoved = true;
+
+                                    clickedTile = null;
+                                    hoveredTile = null;
+                                }
                             }
                         }
                     }
@@ -62,26 +90,24 @@ namespace SNGames.M3
             }
         }
 
-        private void SwapTiles()
+        private void SwapTiles(M3_Tile tile1, M3_Tile tile2)
         {
-            if (clickedTile == null || hoveredTile == null) return;
+            if (tile1 == null || tile2 == null) return;
 
-            ServiceRegistry.Get<M3_Service_BoardData>().SwapInBoardTilesData(clickedTile, hoveredTile);
-            ServiceRegistry.Get<M3_Service_BoardData>().SwapInBoardGamePiecesData(clickedTile.TileGamePiece, hoveredTile.TileGamePiece);
+            ServiceRegistry.Get<M3_Service_BoardData>().SwapInBoardGamePiecesData(tile1.TileGamePiece, tile2.TileGamePiece);
 
-            var tempGamePiece = clickedTile.TileGamePiece;
+            var tempGamePiece = tile1.TileGamePiece;
 
-            clickedTile.SetTileGamePiece(hoveredTile.TileGamePiece);
-            hoveredTile.SetTileGamePiece(tempGamePiece);
+            tile1.SetTileGamePiece(tile2.TileGamePiece);
+            tile2.SetTileGamePiece(tempGamePiece);
 
-            clickedTile.TileGamePiece?.SetTile(clickedTile);
-            hoveredTile.TileGamePiece?.SetTile(hoveredTile);
+            tile1.TileGamePiece.SetTile(tile1);
+            tile2.TileGamePiece.SetTile(tile2);
+        }
 
-            currentTileMoved = true;
-            hoveredTileMoved = true;
-
-            clickedTile = null;
-            hoveredTile = null;
+        private bool IsClickedAndHoveredGamePicesInMovingState()
+        {
+            return currentTileMoved && hoveredTileMoved;
         }
     }
 }
