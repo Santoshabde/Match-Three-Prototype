@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using SNGames.CommonModule;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace SNGames.M3
@@ -27,10 +28,17 @@ namespace SNGames.M3
         [SerializeField] private int width;
         [SerializeField] private int height;
 
+        void Start()
+        {
+            SNEventsController<M3_InGameEvents>.RegisterEvent<object>(M3_InGameEvents.FILL_EMPTY_BOARD_SPOTS, FillEmptyBoardSpots);
+        }
+
         void OnDestroy()
         {
             ClearExistingTilesInGame();
             ClearExistingGamePiecesInGame();
+
+            SNEventsController<M3_InGameEvents>.DeregisterEvent<object>(M3_InGameEvents.FILL_EMPTY_BOARD_SPOTS, FillEmptyBoardSpots);
         }
 
         #region  Public Region
@@ -84,6 +92,29 @@ namespace SNGames.M3
 
         #region  Private Region
 
+        private void FillEmptyBoardSpots(object obj)
+        {
+            var gamePiecesOnBoard = ServiceRegistry.Get<M3_Service_BoardData>().GetGamePiecesOnBoard();
+            var tilesOnBoard = ServiceRegistry.Get<M3_Service_BoardData>().GetTilesOnBoard();
+
+            for (int x = 0; x < width; x++)
+            {
+                for (int y = 0; y < height; y++)
+                {
+                    if (gamePiecesOnBoard[x, y] == null)
+                    {
+                        var randomTilePicked = allGamePieces[Random.Range(0, allGamePieces.Count)];
+
+                        M3_GamePiece gamePiece = Instantiate(randomTilePicked, new Vector3(x, y, 0), Quaternion.identity, transform);
+                        gamePiece.Init(x, y, tilesOnBoard[x, y]);
+                        tilesOnBoard[x, y].Init(x, y, gamePiece);
+
+                        gamePiecesOnBoard[x, y] = gamePiece;
+                    }
+                }
+            }
+        }
+
         private M3_GamePiece GetARandomNonMatchFormiongPiece(int x, int y, M3_GamePiece[,] gamePiecesOnBoard)
         {
             M3_GamePiece randomGamePiece;
@@ -106,7 +137,7 @@ namespace SNGames.M3
                         Debug.LogError("Cannot find a non-match forming piece after " + maxTriesToFindNonMatchFormingPiece + " tries.");
                         break;
                     }
-                    
+
                     continue;
                 }
                 else

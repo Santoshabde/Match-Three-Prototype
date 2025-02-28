@@ -6,6 +6,7 @@ using Unity.VisualScripting;
 using JetBrains.Annotations;
 using TMPro;
 using System.Collections;
+using System.Linq;
 
 namespace SNGames.M3
 {
@@ -35,8 +36,12 @@ namespace SNGames.M3
             var possibleClickedTileMatches = ServiceRegistry.Get<M3_Service_BoardMatcher>().IdentifyPossibleMatches(clickedTile);
             var possibleHoveredTileMatches = ServiceRegistry.Get<M3_Service_BoardMatcher>().IdentifyPossibleMatches(hoveredTile);
 
-            CleanBoardMatches(possibleClickedTileMatches);
-            CleanBoardMatches(possibleHoveredTileMatches);
+            var mergedMatches = possibleClickedTileMatches
+                    .Concat(possibleHoveredTileMatches)
+                    .Distinct()
+                    .ToList();
+
+            CleanBoardMatches(mergedMatches);
         }
 
         public void CleanBoardMatches(List<M3_GamePiece> matchesFound)
@@ -134,6 +139,10 @@ namespace SNGames.M3
             if (!matchesFound)
             {
                 Debug.Log("Board fully settled, no more matches.");
+
+                //Spawn new board in these places
+                SNEventsController<M3_InGameEvents>.TriggerEvent<object>(M3_InGameEvents.FILL_EMPTY_BOARD_SPOTS, null);
+
                 ServiceRegistry.Get<M3_GameInputService>().ConsumeInput = true;
             }
         }
