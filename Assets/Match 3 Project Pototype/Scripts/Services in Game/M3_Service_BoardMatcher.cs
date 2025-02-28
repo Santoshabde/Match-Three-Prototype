@@ -17,7 +17,7 @@ namespace SNGames.M3
     {
         public override void Init()
         {
-           
+
         }
 
         public override void Deinit()
@@ -62,6 +62,8 @@ namespace SNGames.M3
         {
             M3_GamePiece[,] gamePiecesOnBoard = ServiceRegistry.Get<M3_Service_BoardData>().GetGamePiecesOnBoard();
             M3_GamePiece currentGamePiece = gamePiecesOnBoard[xPos, yPos];
+            if (currentGamePiece == null)
+                return new List<M3_GamePiece>();
 
             List<M3_GamePiece> possibleHorizontalMatches = new List<M3_GamePiece> { currentGamePiece };
 
@@ -99,6 +101,8 @@ namespace SNGames.M3
         {
             M3_GamePiece[,] gamePiecesOnBoard = ServiceRegistry.Get<M3_Service_BoardData>().GetGamePiecesOnBoard();
             M3_GamePiece currentGamePiece = gamePiecesOnBoard[xPos, yPos];
+            if (currentGamePiece == null)
+                return new List<M3_GamePiece>();
 
             List<M3_GamePiece> possibleVerticalMatches = new List<M3_GamePiece> { currentGamePiece };
             var currentPieceType = currentGamePiece.GamePieceType;

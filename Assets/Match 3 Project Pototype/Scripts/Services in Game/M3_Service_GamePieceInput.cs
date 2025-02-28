@@ -109,7 +109,8 @@ namespace SNGames.M3
         private bool CanInitiateSwapBtwClickedAndHoveredTile()
         {
             return hoveredTile != clickedTile
-                && clickedTile.NeighbourTiles.Contains(hoveredTile);
+                && clickedTile.NeighbourTiles.Contains(hoveredTile)
+                && hoveredTile.TileGamePiece != null;
         }
 
         private bool AreThereAnyPossibleMatchesWithClickedAndHoveredTilesSwapped()

@@ -3,6 +3,9 @@ using SNGames.CommonModule;
 using System;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using JetBrains.Annotations;
+using TMPro;
+using System.Collections;
 
 namespace SNGames.M3
 {
@@ -57,10 +60,10 @@ namespace SNGames.M3
                 }
             }
 
-            ReAlignTheBoardAfterMatchesClearing(uniqueColumnNumbersToRearrange);
+            DropTheBoardAfterMatchesClearing(uniqueColumnNumbersToRearrange);
         }
 
-        private void ReAlignTheBoardAfterMatchesClearing(List<int> uniqueColumnNumbersToRearrange)
+        private void DropTheBoardAfterMatchesClearing(List<int> uniqueColumnNumbersToRearrange)
         {
             var gameBoardService = ServiceRegistry.Get<M3_Service_BoardData>();
             var gamePiecesOnBoard = gameBoardService.GetGamePiecesOnBoard();
@@ -70,7 +73,7 @@ namespace SNGames.M3
             {
                 int currentX = columnNumber;
                 // --Track the lowest empty space
-                int emptyY = -1; 
+                int emptyY = -1;
 
                 for (int y = 0; y < boardHeight; y++)
                 {
@@ -92,7 +95,7 @@ namespace SNGames.M3
                         gameBoardService.UpdateNewGamePieceDataOnBoardFromOneTileToAnother(
                             gamePieceToMove, tileToMoveTo, oldTile
                         );
-                        
+
                         gamePieceToMove.MovePieceToTile(tileToMoveTo);
 
                         // -- Go to next empty space!!
@@ -100,7 +103,20 @@ namespace SNGames.M3
                     }
                 }
             }
+
+            M3_ServiceMonobehaviourHelper.Instance.StartCoroutine(LoopCheckForMatchesAfterBoardDrop(gameBoardService));
         }
 
+        private IEnumerator LoopCheckForMatchesAfterBoardDrop(M3_Service_BoardData gameBoardService)
+        {
+            yield return new WaitForSeconds(1f);
+
+            foreach (var piece in gameBoardService.GetTilesOnBoard())
+            {
+                var matches = ServiceRegistry.Get<M3_Service_BoardMatcher>().IdentifyPossibleMatches(piece);
+                if (matches != null && matches.Count > 0)
+                    CleanBoardMatches(matches);
+            }
+        }
     }
 }
