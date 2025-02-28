@@ -67,7 +67,9 @@ namespace SNGames.M3
             {
                 for (int y = 0; y < height; y++)
                 {
-                    M3_GamePiece gamePiece = Instantiate(allGamePieces[Random.Range(0, allGamePieces.Count)], new Vector3(x, y, 0), Quaternion.identity, transform);
+                    M3_GamePiece randomGamePiece = GetARandomNonMatchFormiongPiece(x, y, gamePiecesOnBoard);
+
+                    M3_GamePiece gamePiece = Instantiate(randomGamePiece, new Vector3(x, y, 0), Quaternion.identity, transform);
                     gamePiece.Init(x, y, tilesOnBoard[x, y]);
                     tilesOnBoard[x, y].Init(x, y, gamePiece);
 
@@ -81,6 +83,40 @@ namespace SNGames.M3
         #endregion
 
         #region  Private Region
+
+        private M3_GamePiece GetARandomNonMatchFormiongPiece(int x, int y, M3_GamePiece[,] gamePiecesOnBoard)
+        {
+            M3_GamePiece randomGamePiece;
+
+            int maxTriesToFindNonMatchFormingPiece = 100;
+            int currentTry = 0;
+            while (true)
+            {
+                randomGamePiece = allGamePieces[Random.Range(0, allGamePieces.Count)];
+                var randomGamePieceType = randomGamePiece.GamePieceType;
+
+                var verticalMatches = ServiceRegistry.Get<M3_Service_BoardMatcher>().CheckVerticalMatches(randomGamePieceType, x, y, -1, gamePiecesOnBoard);
+                var horizontalMatches = ServiceRegistry.Get<M3_Service_BoardMatcher>().CheckHorizontalMatches(randomGamePieceType, x, y, -1, gamePiecesOnBoard);
+
+                if (verticalMatches.Count >= 2 || horizontalMatches.Count >= 2)
+                {
+                    currentTry += 1;
+                    if (currentTry >= maxTriesToFindNonMatchFormingPiece)
+                    {
+                        Debug.LogError("Cannot find a non-match forming piece after " + maxTriesToFindNonMatchFormingPiece + " tries.");
+                        break;
+                    }
+                    
+                    continue;
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            return randomGamePiece;
+        }
 
         private void AssignTilesNeighbour(M3_Tile[,] tilesOnBoard)
         {

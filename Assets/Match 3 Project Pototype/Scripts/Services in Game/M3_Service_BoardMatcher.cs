@@ -56,118 +56,71 @@ namespace SNGames.M3
         {
             M3_GamePiece[,] gamePiecesOnBoard = ServiceRegistry.Get<M3_Service_BoardData>().GetGamePiecesOnBoard();
             M3_GamePiece currentGamePiece = gamePiecesOnBoard[xPos, yPos];
-            GamePiceType currentGamePieceType = currentGamePiece.GamePieceType;
+
+            List<M3_GamePiece> possibleHorizontalMatches = new List<M3_GamePiece> { currentGamePiece };
+
+            var currentPieceType = currentGamePiece.GamePieceType;
+
             int width = gamePiecesOnBoard.GetLength(0);
 
-            // -- Possible horizontal Matches
-            List<M3_GamePiece> possibleHorizontalMatches = new List<M3_GamePiece>();
-            //-- Current piece is always part of match - so add this
-            possibleHorizontalMatches.Add(currentGamePiece);
-
-            int currentXIndex = xPos;
-            int matchCount = 0;
-            // -- Check Right --
-            while (currentXIndex < width)
-            {
-                int nextXIndex = currentXIndex + 1;
-                if (nextXIndex >= width)
-                    break;
-
-                M3_GamePiece nextGamePiece = gamePiecesOnBoard[nextXIndex, yPos];
-                GamePiceType nextGamePieceType = nextGamePiece.GamePieceType;
-
-                if (nextGamePieceType == currentGamePieceType)
-                {
-                    matchCount += 1;
-                    currentXIndex += 1;
-
-                    possibleHorizontalMatches.Add(nextGamePiece);
-                }
-                else
-                    break;
-            }
-
-            // -- Check Left --
-            currentXIndex = xPos;
-            while (currentXIndex >= 0)
-            {
-                int nextXIndex = currentXIndex - 1;
-                if (nextXIndex < 0)
-                    break;
-
-                M3_GamePiece nextGamePiece = gamePiecesOnBoard[nextXIndex, yPos];
-                GamePiceType nextGamePieceType = nextGamePiece.GamePieceType;
-
-                if (nextGamePieceType == currentGamePieceType)
-                {
-                    currentXIndex -= 1;
-                    matchCount += 1;
-
-                    possibleHorizontalMatches.Add(nextGamePiece);
-                }
-                else
-                    break;
-            }
+            possibleHorizontalMatches.AddRange(CheckHorizontalMatches(currentPieceType, xPos, yPos, 1, gamePiecesOnBoard));  // Right
+            possibleHorizontalMatches.AddRange(CheckHorizontalMatches(currentPieceType, xPos, yPos, -1, gamePiecesOnBoard)); // Left
 
             return (possibleHorizontalMatches.Count >= 3) ? possibleHorizontalMatches : new List<M3_GamePiece>();
+        }
+
+        public List<M3_GamePiece> CheckHorizontalMatches(GamePiceType currentPieceType, int startX, int yPos, int direction,  M3_GamePiece[,] gamePiecesOnBoard)
+        {
+            int width = gamePiecesOnBoard.GetLength(0);
+
+            List<M3_GamePiece> matches = new List<M3_GamePiece>();
+            int currentX = startX + direction;
+
+            while (currentX >= 0 && currentX < width)
+            {
+                M3_GamePiece nextGamePiece = gamePiecesOnBoard[currentX, yPos];
+                if (nextGamePiece == null || nextGamePiece.GamePieceType != currentPieceType)
+                    break;
+
+                matches.Add(nextGamePiece);
+                currentX += direction;
+            }
+
+            return matches;
         }
 
         public List<M3_GamePiece> IdentifyPossibleVerticalMatches(int xPos, int yPos)
         {
             M3_GamePiece[,] gamePiecesOnBoard = ServiceRegistry.Get<M3_Service_BoardData>().GetGamePiecesOnBoard();
             M3_GamePiece currentGamePiece = gamePiecesOnBoard[xPos, yPos];
-            GamePiceType currentGamePieceType = currentGamePiece.GamePieceType;
-            int height = gamePiecesOnBoard.GetLength(1); // Get board height
 
-            // -- Possible Vertical Matches
-            List<M3_GamePiece> possibleVerticalMatches = new List<M3_GamePiece>();
-            possibleVerticalMatches.Add(currentGamePiece); // Current piece is always part of the match
+            List<M3_GamePiece> possibleVerticalMatches = new List<M3_GamePiece> { currentGamePiece };
+            var currentPieceType = currentGamePiece.GamePieceType;
 
-            int currentYIndex = yPos;
-            int matchCount = 0;
-
-            // -- Check Down --
-            while (currentYIndex < height)
-            {
-                int nextYIndex = currentYIndex + 1;
-                if (nextYIndex >= height)
-                    break;
-
-                M3_GamePiece nextGamePiece = gamePiecesOnBoard[xPos, nextYIndex];
-                GamePiceType nextGamePieceType = nextGamePiece.GamePieceType;
-
-                if (nextGamePieceType == currentGamePieceType)
-                {
-                    matchCount += 1;
-                    currentYIndex += 1;
-                    possibleVerticalMatches.Add(nextGamePiece);
-                }
-                else
-                    break;
-            }
-
-            // -- Check Up --
-            currentYIndex = yPos;
-            while (currentYIndex >= 0)
-            {
-                int nextYIndex = currentYIndex - 1;
-                if (nextYIndex < 0)
-                    break;
-
-                M3_GamePiece nextGamePiece = gamePiecesOnBoard[xPos, nextYIndex];
-                GamePiceType nextGamePieceType = nextGamePiece.GamePieceType;
-
-                if (nextGamePieceType == currentGamePieceType)
-                {
-                    currentYIndex -= 1;
-                    matchCount += 1;
-                    possibleVerticalMatches.Add(nextGamePiece);
-                }
-                else
-                    break;
-            }
+            possibleVerticalMatches.AddRange(CheckVerticalMatches(currentPieceType, xPos, yPos, 1, gamePiecesOnBoard)); // Downward
+            possibleVerticalMatches.AddRange(CheckVerticalMatches(currentPieceType, xPos, yPos, -1 , gamePiecesOnBoard)); // Upward
 
             return (possibleVerticalMatches.Count >= 3) ? possibleVerticalMatches : new List<M3_GamePiece>();
+        }
+
+        public List<M3_GamePiece> CheckVerticalMatches(GamePiceType currentPieceType, int xPos, int startY, int direction, M3_GamePiece[,] gamePiecesOnBoard)
+        {
+            int height = gamePiecesOnBoard.GetLength(1);
+
+            List<M3_GamePiece> matches = new List<M3_GamePiece>();
+            int currentY = startY + direction;
+
+            while (currentY >= 0 && currentY < height)
+            {
+                M3_GamePiece nextGamePiece = gamePiecesOnBoard[xPos, currentY];
+                if (nextGamePiece == null || nextGamePiece.GamePieceType != currentPieceType)
+                    break;
+
+                matches.Add(nextGamePiece);
+                currentY += direction;
+            }
+
+            return matches;
         }
     }
 }
