@@ -8,9 +8,20 @@ namespace SNGames.M3
         protected override void BindAllServicesInGame()
         {
             //Bind all services
-            BindService(new M3_Service_BoardData());
-            BindService(new M3_Service_BoardMatcher());
-            BindService(new M3_Service_GamePieceInput());
+            var boardDataService = new M3_Service_BoardData();
+            var boardMatcherService = new M3_Service_BoardMatcher();
+            var gamePieceInputService = new M3_Service_GamePieceInput();
+            var gameBoardStatusUpdaterService = new M3_Service_GameBoardStatusUpdater();
+
+            BindService(boardDataService);
+            BindService(boardMatcherService);
+            BindService(gamePieceInputService);
+            BindService(gameBoardStatusUpdaterService);
+
+            boardDataService.Init();
+            boardMatcherService.Init();
+            gamePieceInputService.Init();
+            gameBoardStatusUpdaterService.Init();
         }
     }
 }

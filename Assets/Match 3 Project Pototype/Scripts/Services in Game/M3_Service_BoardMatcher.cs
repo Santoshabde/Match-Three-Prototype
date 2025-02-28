@@ -3,6 +3,7 @@ using SNGames.CommonModule;
 using UnityEditor.U2D.Aseprite;
 using System.Collections.Generic;
 using System.Linq;
+using System;
 
 namespace SNGames.M3
 {
@@ -16,10 +17,15 @@ namespace SNGames.M3
     {
         public override void Init()
         {
-
+           
         }
 
         public override void Deinit()
+        {
+
+        }
+
+        private void OnSwapCompleted(object u)
         {
 
         }
@@ -69,7 +75,7 @@ namespace SNGames.M3
             return (possibleHorizontalMatches.Count >= 3) ? possibleHorizontalMatches : new List<M3_GamePiece>();
         }
 
-        public List<M3_GamePiece> CheckHorizontalMatches(GamePiceType currentPieceType, int startX, int yPos, int direction,  M3_GamePiece[,] gamePiecesOnBoard)
+        public List<M3_GamePiece> CheckHorizontalMatches(GamePiceType currentPieceType, int startX, int yPos, int direction, M3_GamePiece[,] gamePiecesOnBoard)
         {
             int width = gamePiecesOnBoard.GetLength(0);
 
@@ -98,7 +104,7 @@ namespace SNGames.M3
             var currentPieceType = currentGamePiece.GamePieceType;
 
             possibleVerticalMatches.AddRange(CheckVerticalMatches(currentPieceType, xPos, yPos, 1, gamePiecesOnBoard)); // Downward
-            possibleVerticalMatches.AddRange(CheckVerticalMatches(currentPieceType, xPos, yPos, -1 , gamePiecesOnBoard)); // Upward
+            possibleVerticalMatches.AddRange(CheckVerticalMatches(currentPieceType, xPos, yPos, -1, gamePiecesOnBoard)); // Upward
 
             return (possibleVerticalMatches.Count >= 3) ? possibleVerticalMatches : new List<M3_GamePiece>();
         }

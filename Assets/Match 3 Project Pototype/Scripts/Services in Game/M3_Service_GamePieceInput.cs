@@ -57,6 +57,8 @@ namespace SNGames.M3
                     //After swapping tiles logical data - check if there are any possible matches which came up after swapping
                     if (AreThereAnyPossibleMatchesWithClickedAndHoveredTilesSwapped())
                     {
+                        SNEventsController<M3_InGameEvents>.TriggerEvent<(M3_Tile, M3_Tile)>(M3_InGameEvents.SWAP_COMPLETED, (clickedTile, hoveredTile));
+
                         ResetClickedAndHoveredTilesOnSettledState();
                     }
                     //If no? Then reset what you have swapped - swap back - both physically and logically
@@ -73,6 +75,8 @@ namespace SNGames.M3
                 }
             }
         }
+
+        #region Private Section
 
         private void SwapTilesLogicalData(M3_Tile tile1, M3_Tile tile2)
         {
@@ -113,7 +117,7 @@ namespace SNGames.M3
             var possibleClickedTileMatches = ServiceRegistry.Get<M3_Service_BoardMatcher>().IdentifyPossibleMatches(clickedTile);
             var possibleHoveredTileMatches = ServiceRegistry.Get<M3_Service_BoardMatcher>().IdentifyPossibleMatches(hoveredTile);
 
-            DevTestingScript.Instance.HighlightCurrentMatches(possibleClickedTileMatches, possibleHoveredTileMatches);
+            //DevTestingScript.Instance.HighlightCurrentMatches(possibleClickedTileMatches, possibleHoveredTileMatches);
 
             return possibleClickedTileMatches.Count > 0
                 || possibleHoveredTileMatches.Count > 0;
@@ -127,5 +131,7 @@ namespace SNGames.M3
             clickedTile = null;
             hoveredTile = null;
         }
+
+        #endregion
     }
 }

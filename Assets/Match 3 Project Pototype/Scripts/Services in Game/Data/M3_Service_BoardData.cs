@@ -26,6 +26,14 @@ namespace SNGames.M3
 
         public M3_Tile[,] GetTilesOnBoard() => tilesOnBoard;
 
+        public (int, int) GetBoardWidthAndHeight()
+        {
+            var boardWidth = tilesOnBoard.GetLength(0);
+            var boardHeight = tilesOnBoard.GetLength(1);
+
+            return (boardWidth, boardHeight);
+        }
+
 
         // --- GamePieces Data on Board ---
         public void SetGamePiecesOnBoard(M3_GamePiece[,] gamePiecesOnBoard)
@@ -34,6 +42,11 @@ namespace SNGames.M3
         }
 
         public M3_GamePiece[,] GetGamePiecesOnBoard() => gamePiecesOnBoard;
+
+        public void NullTheGamePiceOnBoardData(M3_GamePiece gamePiece)
+        {
+            gamePiecesOnBoard[gamePiece.BoardPosition.x, gamePiece.BoardPosition.y] = null;
+        }
 
         public void SwapInBoardGamePiecesData(M3_GamePiece gamePiece1, M3_GamePiece gamePiece2)
         {
@@ -45,6 +58,18 @@ namespace SNGames.M3
 
             gamePiece1.Init(gamePiece2BoardPosition.x, gamePiece2BoardPosition.y);
             gamePiece2.Init(gamePiece1BoardPosition.x, gamePiece1BoardPosition.y);
+        }
+
+        public void UpdateNewGamePieceDataOnBoardFromOneTileToAnother(M3_GamePiece newGamePiece, M3_Tile newTile, M3_Tile oldTile)
+        {
+            gamePiecesOnBoard[newTile.BoardPosition.x, newTile.BoardPosition.y] = newGamePiece;
+
+            newGamePiece.Init(newTile.BoardPosition.x, newTile.BoardPosition.y, newTile);
+
+            newTile.SetTileGamePiece(newGamePiece);
+
+            gamePiecesOnBoard[oldTile.BoardPosition.x, oldTile.BoardPosition.y] = null;
+            oldTile.SetTileGamePiece(null);
         }
     }
 }

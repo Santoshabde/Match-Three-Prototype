@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace SNGames.CommonModule
 {
@@ -10,6 +11,7 @@ namespace SNGames.CommonModule
         // Register an event with a specific data type
         public static void RegisterEvent<U>(T eventName, Action<U> actionCallBack)
         {
+            Debug.Log("[Event] RegisterEvent: " + eventName);
             if (eventsInGame.ContainsKey(eventName))
             {
                 eventsInGame[eventName] = Delegate.Combine(eventsInGame[eventName], actionCallBack);
@@ -23,6 +25,7 @@ namespace SNGames.CommonModule
         // Trigger an event with a specific data type
         public static void TriggerEvent<U>(T eventName, U data)
         {
+            Debug.Log("[Event] Triggered Event: " + eventName);
             if (eventsInGame.TryGetValue(eventName, out var del))
             {
                 if (del is Action<U> callback)
