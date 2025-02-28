@@ -65,6 +65,12 @@ namespace SNGames.M3
 
         private void DropTheBoardAfterMatchesClearing(List<int> uniqueColumnNumbersToRearrange)
         {
+            if(uniqueColumnNumbersToRearrange.Count >= 0)
+            {
+                //Stop input
+                ServiceRegistry.Get<M3_GameInputService>().ConsumeInput = false;
+            }
+
             var gameBoardService = ServiceRegistry.Get<M3_Service_BoardData>();
             var gamePiecesOnBoard = gameBoardService.GetGamePiecesOnBoard();
             var boardHeight = gameBoardService.GetBoardWidthAndHeight().Item2;
@@ -109,13 +115,26 @@ namespace SNGames.M3
 
         private IEnumerator LoopCheckForMatchesAfterBoardDrop(M3_Service_BoardData gameBoardService)
         {
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(1f); // Wait for board updates
+
+            bool matchesFound = false;
 
             foreach (var piece in gameBoardService.GetTilesOnBoard())
             {
                 var matches = ServiceRegistry.Get<M3_Service_BoardMatcher>().IdentifyPossibleMatches(piece);
                 if (matches != null && matches.Count > 0)
+                {
+                    matchesFound = true;
                     CleanBoardMatches(matches);
+                    yield break; // Exit the coroutine so it starts again
+                }
+            }
+
+            // If no new matches were found, recursion is complete
+            if (!matchesFound)
+            {
+                Debug.Log("Board fully settled, no more matches.");
+                ServiceRegistry.Get<M3_GameInputService>().ConsumeInput = true;
             }
         }
     }

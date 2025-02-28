@@ -12,16 +12,19 @@ namespace SNGames.M3
             var boardMatcherService = new M3_Service_BoardMatcher();
             var gamePieceInputService = new M3_Service_GamePieceInput();
             var gameBoardStatusUpdaterService = new M3_Service_GameBoardStatusUpdater();
+            var gameInputService = new M3_GameInputService();
 
             BindService(boardDataService);
             BindService(boardMatcherService);
             BindService(gamePieceInputService);
             BindService(gameBoardStatusUpdaterService);
+            BindService(gameInputService);
 
             boardDataService.Init();
             boardMatcherService.Init();
             gamePieceInputService.Init();
             gameBoardStatusUpdaterService.Init();
+            gameInputService.Init();
         }
     }
 }

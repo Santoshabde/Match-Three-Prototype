@@ -103,7 +103,7 @@ namespace SNGames.M3
 
         private bool IsClickedAndHoveredGamePicesNOTInMovingState()
         {
-            return currentTileIsStatic && hoveredTileIsStatic;
+            return currentTileIsStatic && hoveredTileIsStatic && ServiceRegistry.Get<M3_GameInputService>().ConsumeInput;
         }
 
         private bool CanInitiateSwapBtwClickedAndHoveredTile()
