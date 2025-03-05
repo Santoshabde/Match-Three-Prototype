@@ -41,5 +41,13 @@ namespace SNGames.M3
                 OnCompleted?.Invoke();
             });
         }
+
+        public void MovePieceToCurrentTile(float time, Action OnComplete = null)
+        {
+            transform.DOMove(currentGamePieceTile.transform.position, time).SetEase(Ease.OutSine).OnComplete(() =>
+          {
+              OnComplete?.Invoke();
+          });
+        }
     }
 }

@@ -70,10 +70,18 @@ namespace SNGames.M3
                     ServiceRegistry.Get<M3_Service_BoardData>().NullTheGamePiceOnBoardData(gamePiece);
 
                     //3. Destroy the GamePiece
+                    M3_VFXController.Instance.SpawnVFX("Match", gamePiece.transform.position, Quaternion.identity, Vector3.one);
+
                     GameObject.Destroy(gamePiece.gameObject);
                 }
             }
 
+            M3_ServiceMonobehaviourHelper.Instance.StartCoroutine(Delay_DropTheBoardAfterMatchesClearing(uniqueColumnNumbersToRearrange));
+        }
+
+        IEnumerator Delay_DropTheBoardAfterMatchesClearing(List<int> uniqueColumnNumbersToRearrange)
+        {
+            yield return new WaitForSeconds(0.20f);
             DropTheBoardAfterMatchesClearing(uniqueColumnNumbersToRearrange);
         }
 
@@ -129,7 +137,7 @@ namespace SNGames.M3
 
         private IEnumerator LoopCheckForMatchesAfterBoardDrop(M3_Service_BoardData gameBoardService)
         {
-            yield return new WaitForSeconds(1f); // Wait for board updates
+            yield return new WaitForSeconds(0.3f); // Wait for board updates
 
             bool matchesFound = false;
 
@@ -158,7 +166,7 @@ namespace SNGames.M3
 
             IEnumerator RecheckForMatchesAfterFillingEmptyBoard(List<M3_Tile> newTilesWhereWeSpawnedRandoms)
             {
-                yield return new WaitForSeconds(1f);
+                yield return new WaitForSeconds(0.32f);
                 var matches = ServiceRegistry.Get<M3_Service_BoardMatcher>().IdentifyPossibleMatches(newTilesWhereWeSpawnedRandoms);
                 CleanBoardMatches(matches);
             }

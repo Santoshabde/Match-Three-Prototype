@@ -106,15 +106,18 @@ namespace SNGames.M3
                 {
                     if (gamePiecesOnBoard[x, y] == null)
                     {
+                        Vector3 spawnOffset = new Vector3(0, 10, 0);
+
                         var randomTilePicked = allGamePieces[Random.Range(0, allGamePieces.Count)];
 
-                        M3_GamePiece gamePiece = Instantiate(randomTilePicked, new Vector3(x, y, 0), Quaternion.identity, transform);
+                        M3_GamePiece gamePiece = Instantiate(randomTilePicked, new Vector3(x, y, 0) + spawnOffset, Quaternion.identity, transform);
                         gamePiece.Init(x, y, tilesOnBoard[x, y]);
                         tilesOnBoard[x, y].Init(x, y, gamePiece);
 
                         gamePiecesOnBoard[x, y] = gamePiece;
-
                         newTilesWhereWeSpawnedRandoms.Add(tilesOnBoard[x, y]);
+
+                        gamePiece.MovePieceToCurrentTile(0.25f);
                     }
                 }
             }
