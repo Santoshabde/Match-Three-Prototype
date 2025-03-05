@@ -25,9 +25,19 @@ namespace SNGames.M3
 
         }
 
-        private void OnSwapCompleted(object u)
+        public List<M3_GamePiece> IdentifyPossibleMatches(List<M3_Tile> tiles)
         {
+            HashSet<M3_GamePiece> possibleMatches = new HashSet<M3_GamePiece>();
 
+            foreach (var tile in tiles)
+            {
+                if (tile != null)
+                {
+                    possibleMatches.UnionWith(IdentifyPossibleMatches(tile)); // Add unique matches
+                }
+            }
+
+            return possibleMatches.ToList(); // Convert to List and return
         }
 
         public List<M3_GamePiece> IdentifyPossibleMatches(M3_Tile tile)

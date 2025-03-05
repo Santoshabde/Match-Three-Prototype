@@ -130,7 +130,7 @@ namespace SNGames.M3
                 if (matches != null && matches.Count > 0)
                 {
                     matchesFound = true;
-                    CleanBoardMatches(matches);
+                    CleanBoardMatches(matches); //Recursion function
                     yield break; // Exit the coroutine so it starts again
                 }
             }
@@ -141,7 +141,7 @@ namespace SNGames.M3
                 Debug.Log("Board fully settled, no more matches.");
 
                 //Spawn new board in these places
-                SNEventsController<M3_InGameEvents>.TriggerEvent<object>(M3_InGameEvents.FILL_EMPTY_BOARD_SPOTS, null);
+               // SNEventsController<M3_InGameEvents>.TriggerEvent<object>(M3_InGameEvents.FILL_EMPTY_BOARD_SPOTS, null);
 
                 ServiceRegistry.Get<M3_GameInputService>().ConsumeInput = true;
             }

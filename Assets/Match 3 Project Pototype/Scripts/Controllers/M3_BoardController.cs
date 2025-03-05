@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using SNGames.CommonModule;
 using Unity.VisualScripting;
@@ -97,6 +98,8 @@ namespace SNGames.M3
             var gamePiecesOnBoard = ServiceRegistry.Get<M3_Service_BoardData>().GetGamePiecesOnBoard();
             var tilesOnBoard = ServiceRegistry.Get<M3_Service_BoardData>().GetTilesOnBoard();
 
+            List<M3_Tile> newTilesWhereWeSpawnedRandoms = new List<M3_Tile>();
+
             for (int x = 0; x < width; x++)
             {
                 for (int y = 0; y < height; y++)
@@ -110,9 +113,22 @@ namespace SNGames.M3
                         tilesOnBoard[x, y].Init(x, y, gamePiece);
 
                         gamePiecesOnBoard[x, y] = gamePiece;
+
+                        newTilesWhereWeSpawnedRandoms.Add(tilesOnBoard[x, y]);
                     }
                 }
             }
+
+            ServiceRegistry.Get<M3_Service_BoardData>().SetGamePiecesOnBoard(gamePiecesOnBoard);
+
+            StartCoroutine(Test(newTilesWhereWeSpawnedRandoms));
+        }
+
+        private IEnumerator Test(List<M3_Tile> newTilesWhereWeSpawnedRandoms)
+        {
+            yield return new WaitForSeconds(1f);
+            var matches = ServiceRegistry.Get<M3_Service_BoardMatcher>().IdentifyPossibleMatches(newTilesWhereWeSpawnedRandoms);
+            ServiceRegistry.Get<M3_Service_GameBoardStatusUpdater>().CleanBoardMatches(matches);
         }
 
         private M3_GamePiece GetARandomNonMatchFormiongPiece(int x, int y, M3_GamePiece[,] gamePiecesOnBoard)
