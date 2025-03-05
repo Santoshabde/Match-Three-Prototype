@@ -121,14 +121,7 @@ namespace SNGames.M3
 
             ServiceRegistry.Get<M3_Service_BoardData>().SetGamePiecesOnBoard(gamePiecesOnBoard);
 
-            StartCoroutine(Test(newTilesWhereWeSpawnedRandoms));
-        }
-
-        private IEnumerator Test(List<M3_Tile> newTilesWhereWeSpawnedRandoms)
-        {
-            yield return new WaitForSeconds(1f);
-            var matches = ServiceRegistry.Get<M3_Service_BoardMatcher>().IdentifyPossibleMatches(newTilesWhereWeSpawnedRandoms);
-            ServiceRegistry.Get<M3_Service_GameBoardStatusUpdater>().CleanBoardMatches(matches);
+            SNEventsController<M3_InGameEvents>.TriggerEvent<List<M3_Tile>>(M3_InGameEvents.EMPTY_BOARD_SPORTS_FILLED, newTilesWhereWeSpawnedRandoms);
         }
 
         private M3_GamePiece GetARandomNonMatchFormiongPiece(int x, int y, M3_GamePiece[,] gamePiecesOnBoard)

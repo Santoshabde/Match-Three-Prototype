@@ -7,6 +7,7 @@ using JetBrains.Annotations;
 using TMPro;
 using System.Collections;
 using System.Linq;
+using UnityEngine.Tilemaps;
 
 namespace SNGames.M3
 {
@@ -15,11 +16,13 @@ namespace SNGames.M3
         public override void Init()
         {
             SNEventsController<M3_InGameEvents>.RegisterEvent<(M3_Tile, M3_Tile)>(M3_InGameEvents.SWAP_COMPLETED, OnSwapCompleted);
+            SNEventsController<M3_InGameEvents>.RegisterEvent<List<M3_Tile>>(M3_InGameEvents.EMPTY_BOARD_SPORTS_FILLED, OnEmptyBoardSpotsFilled);
         }
 
         public override void Deinit()
         {
             SNEventsController<M3_InGameEvents>.DeregisterEvent<(M3_Tile, M3_Tile)>(M3_InGameEvents.SWAP_COMPLETED, OnSwapCompleted);
+            SNEventsController<M3_InGameEvents>.DeregisterEvent<List<M3_Tile>>(M3_InGameEvents.EMPTY_BOARD_SPORTS_FILLED, OnEmptyBoardSpotsFilled);
         }
 
         private void OnSwapCompleted((M3_Tile, M3_Tile) clickedAndHoveredTile)
@@ -46,6 +49,9 @@ namespace SNGames.M3
 
         public void CleanBoardMatches(List<M3_GamePiece> matchesFound)
         {
+            if (matchesFound == null || matchesFound.Count == 0)
+                return;
+
             List<int> uniqueColumnNumbersToRearrange = new List<int>();
             foreach (var gamePiece in matchesFound)
             {
@@ -70,7 +76,7 @@ namespace SNGames.M3
 
         private void DropTheBoardAfterMatchesClearing(List<int> uniqueColumnNumbersToRearrange)
         {
-            if(uniqueColumnNumbersToRearrange.Count >= 0)
+            if (uniqueColumnNumbersToRearrange.Count >= 0)
             {
                 //Stop input
                 ServiceRegistry.Get<M3_GameInputService>().ConsumeInput = false;
@@ -138,12 +144,22 @@ namespace SNGames.M3
             // If no new matches were found, recursion is complete
             if (!matchesFound)
             {
-                Debug.Log("Board fully settled, no more matches.");
-
                 //Spawn new board in these places
-               // SNEventsController<M3_InGameEvents>.TriggerEvent<object>(M3_InGameEvents.FILL_EMPTY_BOARD_SPOTS, null);
+                SNEventsController<M3_InGameEvents>.TriggerEvent<object>(M3_InGameEvents.FILL_EMPTY_BOARD_SPOTS, null);
 
                 ServiceRegistry.Get<M3_GameInputService>().ConsumeInput = true;
+            }
+        }
+
+        private void OnEmptyBoardSpotsFilled(List<M3_Tile> list)
+        {
+            M3_ServiceMonobehaviourHelper.Instance.StartCoroutine(RecheckForMatchesAfterFillingEmptyBoard(list));
+
+            IEnumerator RecheckForMatchesAfterFillingEmptyBoard(List<M3_Tile> newTilesWhereWeSpawnedRandoms)
+            {
+                yield return new WaitForSeconds(1f);
+                var matches = ServiceRegistry.Get<M3_Service_BoardMatcher>().IdentifyPossibleMatches(newTilesWhereWeSpawnedRandoms);
+                CleanBoardMatches(matches);
             }
         }
     }
