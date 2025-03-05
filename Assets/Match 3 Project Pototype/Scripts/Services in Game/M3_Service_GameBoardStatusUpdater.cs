@@ -50,7 +50,10 @@ namespace SNGames.M3
         public void CleanBoardMatches(List<M3_GamePiece> matchesFound)
         {
             if (matchesFound == null || matchesFound.Count == 0)
+            {
+                ServiceRegistry.Get<M3_GameInputService>().ConsumeInput = true;
                 return;
+            }
 
             List<int> uniqueColumnNumbersToRearrange = new List<int>();
             foreach (var gamePiece in matchesFound)
@@ -146,8 +149,6 @@ namespace SNGames.M3
             {
                 //Spawn new board in these places
                 SNEventsController<M3_InGameEvents>.TriggerEvent<object>(M3_InGameEvents.FILL_EMPTY_BOARD_SPOTS, null);
-
-                ServiceRegistry.Get<M3_GameInputService>().ConsumeInput = true;
             }
         }
 

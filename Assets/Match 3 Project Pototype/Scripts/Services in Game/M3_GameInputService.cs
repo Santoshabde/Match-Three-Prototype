@@ -7,7 +7,7 @@ namespace SNGames.M3
     {
         private bool consumeInput = true;
 
-        public bool ConsumeInput { get { return true; } set { consumeInput = value; } }
+        public bool ConsumeInput { get { return consumeInput; } set { consumeInput = value; } }
 
         public override void Deinit()
         {
