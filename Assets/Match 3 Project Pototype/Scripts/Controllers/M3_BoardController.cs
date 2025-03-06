@@ -17,17 +17,18 @@ namespace SNGames.M3
         Orange
     }
 
-    public enum TileType
+    [System.Serializable]
+    public class TilesTypesData
     {
-        InvisibleBlocked,
-        Normal
+        public string tileType;
+        public M3_Tile tile;
     }
 
     public class M3_BoardController : MonoBehaviour
     {
         [Header("Required Componenets")]
-        [SerializeField] private M3_Tile tilePrefab;
         [SerializeField] private List<M3_GamePiece> allGamePieces;
+        [SerializeField] private List<TilesTypesData> allTilesInGame;
         [SerializeField] private M3_CameraController cameraController;
 
         void Start()
@@ -58,12 +59,17 @@ namespace SNGames.M3
                 int yPos = (int)pos.y;
 
                 // Spawn tile
-                M3_Tile tile = Instantiate(tilePrefab, new Vector3(xPos, yPos, 0), Quaternion.identity, transform);
-                tile.Init(xPos, yPos, null, tileData.tileType);
-                tilesOnBoard[xPos, yPos] = tile;
+                M3_Tile toSpawn = allTilesInGame.Find(t => t.tileType == tileData.tileType).tile;
+                if (toSpawn != null)
+                {
+                    M3_Tile tile = Instantiate(toSpawn, new Vector3(xPos, yPos, 0), Quaternion.identity, transform);
+                    tile.Init(xPos, yPos, null);
+                    tile.SetTileVisuals();
+                    tilesOnBoard[xPos, yPos] = tile;
 
-                tile.OnTileClicked += ServiceRegistry.Get<M3_Service_GamePieceInput>().OnTileClicked;
-                tile.OnTileHovered += ServiceRegistry.Get<M3_Service_GamePieceInput>().OnTileHovered;
+                    tile.OnTileClicked += ServiceRegistry.Get<M3_Service_GamePieceInput>().OnTileClicked;
+                    tile.OnTileHovered += ServiceRegistry.Get<M3_Service_GamePieceInput>().OnTileHovered;
+                }
             }
 
             AssignTilesNeighbour(tilesOnBoard, levelData.width, levelData.height);
@@ -85,8 +91,10 @@ namespace SNGames.M3
             {
                 for (int y = 0; y < height; y++)
                 {
-                    M3_Tile tile = Instantiate(tilePrefab, new Vector3(x, y, 0), Quaternion.identity, transform);
-                    tile.Init(x, y, null, TileType.Normal);
+                    M3_Tile toSpawn = allTilesInGame.Find(t => t.tileType == "Normal").tile;
+                    M3_Tile tile = Instantiate(toSpawn, new Vector3(x, y, 0), Quaternion.identity, transform);
+                    tile.Init(x, y, null);
+                    tile.SetTileVisuals();
                     tilesOnBoard[x, y] = tile;
 
                     tile.OnTileClicked += ServiceRegistry.Get<M3_Service_GamePieceInput>().OnTileClicked;
@@ -119,7 +127,8 @@ namespace SNGames.M3
                 int xPos = (int)pos.x;
                 int yPos = (int)pos.y;
                 M3_GamePiece gamePiece = null;
-                if (tileData.tileType == TileType.Normal)
+
+                if (tilesOnBoard[xPos, yPos].CanHoldNormalGamePiece())
                 {
                     M3_GamePiece gamePieceToSpawn = allGamePieces.Find(t => t.GamePieceType == tileData.gamePiceType);
 
@@ -128,7 +137,7 @@ namespace SNGames.M3
 
                 }
 
-                tilesOnBoard[xPos, yPos].Init(xPos, yPos, gamePiece, tileData.tileType);
+                tilesOnBoard[xPos, yPos].Init(xPos, yPos, gamePiece);
                 gamePiecesOnBoard[xPos, yPos] = gamePiece;
             }
 
@@ -151,7 +160,7 @@ namespace SNGames.M3
 
                     M3_GamePiece gamePiece = Instantiate(randomGamePiece, new Vector3(x, y, 0), Quaternion.identity, transform);
                     gamePiece.Init(x, y, tilesOnBoard[x, y]);
-                    tilesOnBoard[x, y].Init(x, y, gamePiece, TileType.Normal);
+                    tilesOnBoard[x, y].Init(x, y, gamePiece);
 
                     gamePiecesOnBoard[x, y] = gamePiece;
                 }
@@ -172,7 +181,7 @@ namespace SNGames.M3
                 for (int y = 0; y < gamePiecesOnBoard.GetLength(1); y++)
                 {
                     if (gamePiecesOnBoard[x, y] == null
-                    && tilesOnBoard[x, y].TileType == TileType.Normal)
+                    && tilesOnBoard[x, y].CanHoldNormalGamePiece())
                     {
                         Vector3 spawnOffset = new Vector3(0, 10, 0);
 
@@ -180,7 +189,7 @@ namespace SNGames.M3
 
                         M3_GamePiece gamePiece = Instantiate(randomTilePicked, new Vector3(x, y, 0) + spawnOffset, Quaternion.identity, transform);
                         gamePiece.Init(x, y, tilesOnBoard[x, y]);
-                        tilesOnBoard[x, y].Init(x, y, gamePiece, TileType.Normal);
+                        tilesOnBoard[x, y].Init(x, y, gamePiece);
 
                         gamePiecesOnBoard[x, y] = gamePiece;
                         newTilesWhereWeSpawnedRandoms.Add(tilesOnBoard[x, y]);

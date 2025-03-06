@@ -106,7 +106,7 @@ namespace SNGames.M3
 
                 for (int y = 0; y < boardHeight; y++)
                 {
-                    if (tilesOnBoard[currentX, y].TileType == TileType.InvisibleBlocked)
+                    if (!tilesOnBoard[currentX, y].CanHoldNormalGamePiece())
                         continue;
 
                     if (gamePiecesOnBoard[currentX, y] == null)
@@ -133,7 +133,7 @@ namespace SNGames.M3
                         // -- Go to next empty space!!
                         emptyY++;
                         while (emptyY < boardHeight
-                        && gameBoardService.GetTilesOnBoard()[currentX, emptyY].TileType == TileType.InvisibleBlocked)
+                        && !gameBoardService.GetTilesOnBoard()[currentX, emptyY].CanHoldNormalGamePiece())
                         {
                             emptyY++;
                         }

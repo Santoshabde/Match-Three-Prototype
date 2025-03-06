@@ -4,15 +4,17 @@ using UnityEngine;
 
 namespace SNGames.M3
 {
-    public class M3_Tile : MonoBehaviour
+    public abstract class M3_Tile : MonoBehaviour
     {
-        [SerializeField] private SpriteRenderer tileSpriteRenderer;
+        [Header("Required Components")]
+        [SerializeField] protected SpriteRenderer tileSpriteRenderer;
+
+        [Space(20)]
+        [Header("Debug Variables - To Be Removed Later")]
         [SerializeField] private Vector2Int boardPosition;
-        [SerializeField] private TileType tileType;
         [SerializeField] private M3_GamePiece tileGamePiece;
         [SerializeField] private List<M3_Tile> neighbourTiles;
 
-        public TileType TileType => tileType;
         public M3_GamePiece TileGamePiece => tileGamePiece;
         public List<M3_Tile> NeighbourTiles => neighbourTiles;
         public Vector2Int BoardPosition => boardPosition;
@@ -20,15 +22,14 @@ namespace SNGames.M3
         public Action<M3_Tile> OnTileClicked;
         public Action<M3_Tile> OnTileHovered;
 
-        public void Init(int xPos, int yPos, M3_GamePiece gamePiece, TileType tileType)
+        #region  Initializers And Setter Methods
+
+        public void Init(int xPos, int yPos, M3_GamePiece gamePiece)
         {
             this.name = $"Tile ({xPos}, {yPos})";
 
             this.boardPosition = new Vector2Int(xPos, yPos);
             this.tileGamePiece = gamePiece;
-            this.tileType = tileType;   
-
-            SetVisualIdentification(this.tileType);
         }
 
         public void Init(int xPos, int yPos)
@@ -47,19 +48,13 @@ namespace SNGames.M3
             this.neighbourTiles = neighbourTiles;
         }
 
-        #region  Private Region
+        #endregion
 
-        private void SetVisualIdentification(TileType tileType)
-        {
-            switch (tileType)
-            {
-                case TileType.Normal:
-                    break;
-                case TileType.InvisibleBlocked:
-                    this.tileSpriteRenderer.color = new Color(tileSpriteRenderer.color.r, tileSpriteRenderer.color.g, tileSpriteRenderer.color.b, 0f);
-                    break;
-            }
-        }
+        #region Abstract Methods
+
+        public abstract bool CanHoldNormalGamePiece();
+
+        public abstract void SetTileVisuals();
 
         #endregion
 

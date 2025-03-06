@@ -23,7 +23,7 @@ namespace SNGames.M3
     [System.Serializable]
     public class LevelTileData
     {
-        public TileType tileType;
+        public string tileType;
         public float[] boardPosition; // Use an array to match JSON structure
         public GamePiceType gamePiceType;
 
