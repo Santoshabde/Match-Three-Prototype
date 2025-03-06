@@ -24,7 +24,8 @@ namespace SNGames.M3
 
         public void OnTileClicked(M3_Tile tile)
         {
-            if (IsClickedAndHoveredGamePicesNOTInMovingState())
+            if (IsClickedAndHoveredGamePicesNOTInMovingState()
+            && tile.TileType == TileType.Normal)
             {
                 clickedTile = tile;
             }

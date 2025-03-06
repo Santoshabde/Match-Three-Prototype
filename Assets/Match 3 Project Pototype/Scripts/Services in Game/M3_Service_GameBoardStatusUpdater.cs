@@ -132,6 +132,11 @@ namespace SNGames.M3
 
                         // -- Go to next empty space!!
                         emptyY++;
+                        while (emptyY < boardHeight
+                        && gameBoardService.GetTilesOnBoard()[currentX, emptyY].TileType == TileType.InvisibleBlocked)
+                        {
+                            emptyY++;
+                        }
                     }
                 }
             }
