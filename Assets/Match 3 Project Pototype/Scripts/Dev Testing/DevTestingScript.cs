@@ -7,19 +7,26 @@ using UnityEngine;
 public class DevTestingScript : SerializeSingleton<DevTestingScript>
 {
     [SerializeField] private M3_BoardController boardController;
+    [SerializeField] private string levelJson;
     [SerializeField] private int xToStartMatchFinding;
     [SerializeField] private int yToStartMatchFinding;
 
     void Start()
     {
-        SpawnBoard();
+        SpawnBoardWithJsonLevel();
     }
 
-    [ContextMenu("SpawnBoard")]
+    [ContextMenu("SpawnRandomBoard")]
     public void SpawnBoard()
     {
         boardController.InitialSpawnBoardTiles();
         boardController.InitialSpawnRandomGamePicesOnTheBoard(ServiceRegistry.Get<M3_Service_BoardData>().GetTilesOnBoard());
+    }
+
+   [ContextMenu("SpawnBoardFromLevelJson")]
+    public void SpawnBoardWithJsonLevel()
+    {
+        boardController.InitialSpawnBoardTiles_FromLevelJson(levelJson);
     }
 
     [ContextMenu("Find Match")]

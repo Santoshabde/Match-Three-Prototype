@@ -81,7 +81,7 @@ namespace SNGames.M3
 
         IEnumerator Delay_DropTheBoardAfterMatchesClearing(List<int> uniqueColumnNumbersToRearrange)
         {
-            yield return new WaitForSeconds(0.20f);
+            yield return new WaitForSeconds(0.25f);
             DropTheBoardAfterMatchesClearing(uniqueColumnNumbersToRearrange);
         }
 

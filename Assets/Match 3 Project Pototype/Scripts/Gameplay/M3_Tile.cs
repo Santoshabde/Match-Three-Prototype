@@ -7,6 +7,7 @@ namespace SNGames.M3
     public class M3_Tile : MonoBehaviour
     {
         [SerializeField] private Vector2Int boardPosition;
+        [SerializeField] private TileType tileType;
         [SerializeField] private M3_GamePiece tileGamePiece;
         [SerializeField] private List<M3_Tile> neighbourTiles;
 
@@ -17,12 +18,13 @@ namespace SNGames.M3
         public Action<M3_Tile> OnTileClicked;
         public Action<M3_Tile> OnTileHovered;
 
-        public void Init(int xPos, int yPos, M3_GamePiece gamePiece)
+        public void Init(int xPos, int yPos, M3_GamePiece gamePiece, TileType tileType)
         {
             this.name = $"Tile ({xPos}, {yPos})";
 
             this.boardPosition = new Vector2Int(xPos, yPos);
             this.tileGamePiece = gamePiece;
+            this.tileType = tileType;   
         }
 
         public void Init(int xPos, int yPos)

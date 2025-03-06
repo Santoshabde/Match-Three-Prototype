@@ -216,8 +216,8 @@ MonoBehaviour:
   - {fileID: 7701006274325793328, guid: df1e9cadf28468946a1a9d39bdef662e, type: 3}
   - {fileID: 7200716067792962248, guid: 15fb09890cc98994392776ad6161d91b, type: 3}
   cameraController: {fileID: 1613167418}
-  width: 10
-  height: 12
+  width: 7
+  height: 7
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -400,6 +400,57 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   boardController: {fileID: 497912127}
+  levelJson: '{     "levelID": 3,     "levelName": "7x7 Randomized Level",     "width":
+    7,     "height": 7,     "levelTilesData": [         { "tileType": "Normal", "boardPosition":
+    [0, 0], "gamePiceType": "Orange" },         { "tileType": "Normal", "boardPosition":
+    [0, 1], "gamePiceType": "Purple" },         { "tileType": "Normal", "boardPosition":
+    [0, 2], "gamePiceType": "Red" },         { "tileType": "Normal", "boardPosition":
+    [0, 3], "gamePiceType": "Green" },         { "tileType": "Normal", "boardPosition":
+    [0, 4], "gamePiceType": "Yellow" },         { "tileType": "Normal", "boardPosition":
+    [0, 5], "gamePiceType": "Blue" },         { "tileType": "Normal", "boardPosition":
+    [0, 6], "gamePiceType": "Orange" },          { "tileType": "Normal", "boardPosition":
+    [1, 0], "gamePiceType": "Purple" },         { "tileType": "Normal", "boardPosition":
+    [1, 1], "gamePiceType": "Yellow" },         { "tileType": "Normal", "boardPosition":
+    [1, 2], "gamePiceType": "Blue" },         { "tileType": "Normal", "boardPosition":
+    [1, 3], "gamePiceType": "Red" },         { "tileType": "Normal", "boardPosition":
+    [1, 4], "gamePiceType": "Green" },         { "tileType": "Normal", "boardPosition":
+    [1, 5], "gamePiceType": "Orange" },         { "tileType": "Normal", "boardPosition":
+    [1, 6], "gamePiceType": "Purple" },          { "tileType": "Normal", "boardPosition":
+    [2, 0], "gamePiceType": "Red" },         { "tileType": "Normal", "boardPosition":
+    [2, 1], "gamePiceType": "Green" },         { "tileType": "Normal", "boardPosition":
+    [2, 2], "gamePiceType": "Yellow" },         { "tileType": "Normal", "boardPosition":
+    [2, 3], "gamePiceType": "Orange" },         { "tileType": "Normal", "boardPosition":
+    [2, 4], "gamePiceType": "Blue" },         { "tileType": "Normal", "boardPosition":
+    [2, 5], "gamePiceType": "Purple" },         { "tileType": "Normal", "boardPosition":
+    [2, 6], "gamePiceType": "Red" },          { "tileType": "Normal", "boardPosition":
+    [3, 0], "gamePiceType": "Green" },         { "tileType": "Normal", "boardPosition":
+    [3, 1], "gamePiceType": "Blue" },         { "tileType": "Normal", "boardPosition":
+    [3, 2], "gamePiceType": "Orange" },         { "tileType": "Normal", "boardPosition":
+    [3, 3], "gamePiceType": "Purple" },         { "tileType": "Normal", "boardPosition":
+    [3, 4], "gamePiceType": "Red" },         { "tileType": "Normal", "boardPosition":
+    [3, 5], "gamePiceType": "Yellow" },         { "tileType": "Normal", "boardPosition":
+    [3, 6], "gamePiceType": "Green" },          { "tileType": "Normal", "boardPosition":
+    [4, 0], "gamePiceType": "Blue" },         { "tileType": "Normal", "boardPosition":
+    [4, 1], "gamePiceType": "Red" },         { "tileType": "Normal", "boardPosition":
+    [4, 2], "gamePiceType": "Purple" },         { "tileType": "Normal", "boardPosition":
+    [4, 3], "gamePiceType": "Yellow" },         { "tileType": "Normal", "boardPosition":
+    [4, 4], "gamePiceType": "Orange" },         { "tileType": "Normal", "boardPosition":
+    [4, 5], "gamePiceType": "Green" },         { "tileType": "Normal", "boardPosition":
+    [4, 6], "gamePiceType": "Blue" },          { "tileType": "Normal", "boardPosition":
+    [5, 0], "gamePiceType": "Orange" },         { "tileType": "Normal", "boardPosition":
+    [5, 1], "gamePiceType": "Purple" },         { "tileType": "Normal", "boardPosition":
+    [5, 2], "gamePiceType": "Green" },         { "tileType": "Normal", "boardPosition":
+    [5, 3], "gamePiceType": "Red" },         { "tileType": "Normal", "boardPosition":
+    [5, 4], "gamePiceType": "Yellow" },         { "tileType": "Normal", "boardPosition":
+    [5, 5], "gamePiceType": "Blue" },         { "tileType": "Normal", "boardPosition":
+    [5, 6], "gamePiceType": "Orange" },          { "tileType": "Normal", "boardPosition":
+    [6, 0], "gamePiceType": "Purple" },         { "tileType": "Normal", "boardPosition":
+    [6, 1], "gamePiceType": "Yellow" },         { "tileType": "Normal", "boardPosition":
+    [6, 2], "gamePiceType": "Red" },         { "tileType": "Normal", "boardPosition":
+    [6, 3], "gamePiceType": "Green" },         { "tileType": "Normal", "boardPosition":
+    [6, 4], "gamePiceType": "Blue" },         { "tileType": "Normal", "boardPosition":
+    [6, 5], "gamePiceType": "Orange" },         { "tileType": "Normal", "boardPosition":
+    [6, 6], "gamePiceType": "Purple" }     ] } '
   xToStartMatchFinding: 0
   yToStartMatchFinding: 0
 --- !u!1 &619394800
@@ -515,11 +566,43 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 1233099488}
   - {fileID: 497912126}
   - {fileID: 1613167417}
   - {fileID: 473193175}
   - {fileID: 1314352143}
   m_Father: {fileID: 1987232263}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1233099487
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1233099488}
+  m_Layer: 0
+  m_Name: Level Generator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1233099488
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1233099487}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 915409729}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1314352142
 GameObject:
