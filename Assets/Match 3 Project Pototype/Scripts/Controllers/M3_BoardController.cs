@@ -19,7 +19,7 @@ namespace SNGames.M3
 
     public enum TileType
     {
-        Blocked,
+        InvisibleBlocked,
         Normal
     }
 
@@ -29,11 +29,6 @@ namespace SNGames.M3
         [SerializeField] private M3_Tile tilePrefab;
         [SerializeField] private List<M3_GamePiece> allGamePieces;
         [SerializeField] private M3_CameraController cameraController;
-
-        [Space]
-        [Header("Board Settings")]
-        [SerializeField] private int width;
-        [SerializeField] private int height;
 
         void Start()
         {
@@ -49,8 +44,9 @@ namespace SNGames.M3
         }
 
         #region  Public Region
-        public void InitialSpawnBoardTiles_FromLevelJson(string json)
+        public void SpawnBoard_FromLevelJson(string json)
         {
+            // ----- Spawning Tiles -----
             ClearExistingTilesInGame();
 
             LevelData levelData = JsonConvert.DeserializeObject<LevelData>(json);
@@ -75,31 +71,13 @@ namespace SNGames.M3
 
             ServiceRegistry.Get<M3_Service_BoardData>().SetTilesOnBoard(tilesOnBoard);
 
-            InitialSpawnRandomGamePicesOnTheBoard_FromLevelJson(tilesOnBoard, levelData.levelTilesData);
+            // ----- Spawning GamePieces -----
+            SpawnRandomGamePicesOnTheBoard_FromLevelJson(tilesOnBoard, levelData.levelTilesData);
         }
 
-        public void InitialSpawnRandomGamePicesOnTheBoard_FromLevelJson(M3_Tile[,] tilesOnBoard, List<LevelTileData> levelTileDatas)
+        public void SpawnBoard_Randomly(int width, int height)
         {
-            var gamePiecesOnBoard = new M3_GamePiece[width, height];
-            foreach (LevelTileData tileData in levelTileDatas)
-            {
-                M3_GamePiece gamePieceToSpawn = allGamePieces.Find(t => t.GamePieceType == tileData.gamePiceType);
-                Vector2 pos = tileData.GetBoardPosition();
-                int xPos = (int)pos.x;
-                int yPos = (int)pos.y;
-
-                M3_GamePiece gamePiece = Instantiate(gamePieceToSpawn, new Vector3(xPos, yPos, 0), Quaternion.identity, transform);
-                gamePiece.Init(xPos, yPos, tilesOnBoard[xPos, yPos]);
-                tilesOnBoard[xPos, yPos].Init(xPos, yPos, gamePiece, TileType.Normal);
-
-                gamePiecesOnBoard[xPos, yPos] = gamePiece;
-            }
-
-            ServiceRegistry.Get<M3_Service_BoardData>().SetGamePiecesOnBoard(gamePiecesOnBoard);
-        }
-
-        public void InitialSpawnBoardTiles()
-        {
+            // ----- Spawning Tiles -----
             ClearExistingTilesInGame();
 
             var tilesOnBoard = new M3_Tile[width, height];
@@ -120,11 +98,49 @@ namespace SNGames.M3
             SetCameraPositionAndFOVBasedOnBoardSize(width, height);
 
             ServiceRegistry.Get<M3_Service_BoardData>().SetTilesOnBoard(tilesOnBoard);
+
+            // ----- Spawning GamePieces -----
+            SpawnRandomGamePicesOnTheBoard_Randomly(tilesOnBoard);
         }
 
-        public void InitialSpawnRandomGamePicesOnTheBoard(M3_Tile[,] tilesOnBoard)
+        #endregion
+
+        #region  Private Region
+
+        private void SpawnRandomGamePicesOnTheBoard_FromLevelJson(M3_Tile[,] tilesOnBoard, List<LevelTileData> levelTilesData)
+        {
+            int width = tilesOnBoard.GetLength(0);
+            int height = tilesOnBoard.GetLength(1);
+
+            var gamePiecesOnBoard = new M3_GamePiece[width, height];
+            foreach (LevelTileData tileData in levelTilesData)
+            {
+                Vector2 pos = tileData.GetBoardPosition();
+                int xPos = (int)pos.x;
+                int yPos = (int)pos.y;
+                M3_GamePiece gamePiece = null;
+                if (tileData.tileType == TileType.Normal)
+                {
+                    M3_GamePiece gamePieceToSpawn = allGamePieces.Find(t => t.GamePieceType == tileData.gamePiceType);
+
+                    gamePiece = Instantiate(gamePieceToSpawn, new Vector3(xPos, yPos, 0), Quaternion.identity, transform);
+                    gamePiece.Init(xPos, yPos, tilesOnBoard[xPos, yPos]);
+
+                }
+
+                tilesOnBoard[xPos, yPos].Init(xPos, yPos, gamePiece, tileData.tileType);
+                gamePiecesOnBoard[xPos, yPos] = gamePiece;
+            }
+
+            ServiceRegistry.Get<M3_Service_BoardData>().SetGamePiecesOnBoard(gamePiecesOnBoard);
+        }
+
+        private void SpawnRandomGamePicesOnTheBoard_Randomly(M3_Tile[,] tilesOnBoard)
         {
             ClearExistingGamePiecesInGame();
+
+            int width = tilesOnBoard.GetLength(0);
+            int height = tilesOnBoard.GetLength(1);
 
             var gamePiecesOnBoard = new M3_GamePiece[width, height];
             for (int x = 0; x < width; x++)
@@ -144,10 +160,6 @@ namespace SNGames.M3
             ServiceRegistry.Get<M3_Service_BoardData>().SetGamePiecesOnBoard(gamePiecesOnBoard);
         }
 
-        #endregion
-
-        #region  Private Region
-
         private void FillEmptyBoardSpots(object obj)
         {
             var gamePiecesOnBoard = ServiceRegistry.Get<M3_Service_BoardData>().GetGamePiecesOnBoard();
@@ -155,11 +167,12 @@ namespace SNGames.M3
 
             List<M3_Tile> newTilesWhereWeSpawnedRandoms = new List<M3_Tile>();
 
-            for (int x = 0; x < width; x++)
+            for (int x = 0; x < gamePiecesOnBoard.GetLength(0); x++)
             {
-                for (int y = 0; y < height; y++)
+                for (int y = 0; y < gamePiecesOnBoard.GetLength(1); y++)
                 {
-                    if (gamePiecesOnBoard[x, y] == null)
+                    if (gamePiecesOnBoard[x, y] == null
+                    && tilesOnBoard[x, y].TileType == TileType.Normal)
                     {
                         Vector3 spawnOffset = new Vector3(0, 10, 0);
 

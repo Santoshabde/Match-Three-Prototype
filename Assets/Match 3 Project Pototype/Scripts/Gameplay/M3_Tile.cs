@@ -6,11 +6,13 @@ namespace SNGames.M3
 {
     public class M3_Tile : MonoBehaviour
     {
+        [SerializeField] private SpriteRenderer tileSpriteRenderer;
         [SerializeField] private Vector2Int boardPosition;
         [SerializeField] private TileType tileType;
         [SerializeField] private M3_GamePiece tileGamePiece;
         [SerializeField] private List<M3_Tile> neighbourTiles;
 
+        public TileType TileType => tileType;
         public M3_GamePiece TileGamePiece => tileGamePiece;
         public List<M3_Tile> NeighbourTiles => neighbourTiles;
         public Vector2Int BoardPosition => boardPosition;
@@ -25,6 +27,8 @@ namespace SNGames.M3
             this.boardPosition = new Vector2Int(xPos, yPos);
             this.tileGamePiece = gamePiece;
             this.tileType = tileType;   
+
+            SetVisualIdentification(this.tileType);
         }
 
         public void Init(int xPos, int yPos)
@@ -42,6 +46,22 @@ namespace SNGames.M3
         {
             this.neighbourTiles = neighbourTiles;
         }
+
+        #region  Private Region
+
+        private void SetVisualIdentification(TileType tileType)
+        {
+            switch (tileType)
+            {
+                case TileType.Normal:
+                    break;
+                case TileType.InvisibleBlocked:
+                    this.tileSpriteRenderer.color = new Color(tileSpriteRenderer.color.r, tileSpriteRenderer.color.g, tileSpriteRenderer.color.b, 0f);
+                    break;
+            }
+        }
+
+        #endregion
 
         #region  Input Actions
 

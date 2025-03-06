@@ -95,6 +95,7 @@ namespace SNGames.M3
 
             var gameBoardService = ServiceRegistry.Get<M3_Service_BoardData>();
             var gamePiecesOnBoard = gameBoardService.GetGamePiecesOnBoard();
+            var tilesOnBoard = gameBoardService.GetTilesOnBoard();
             var boardHeight = gameBoardService.GetBoardWidthAndHeight().Item2;
 
             foreach (var columnNumber in uniqueColumnNumbersToRearrange)
@@ -105,15 +106,18 @@ namespace SNGames.M3
 
                 for (int y = 0; y < boardHeight; y++)
                 {
+                    if (tilesOnBoard[currentX, y].TileType == TileType.InvisibleBlocked)
+                        continue;
+
                     if (gamePiecesOnBoard[currentX, y] == null)
                     {
                         // -- If this is the first empty space found, track it
                         if (emptyY == -1)
                             emptyY = y;
                     }
+                    // -- Found a piece above an empty space, shift it down
                     else if (emptyY != -1)
                     {
-                        // -- Found a piece above an empty space, shift it down
                         M3_GamePiece gamePieceToMove = gamePiecesOnBoard[currentX, y];
                         M3_Tile tileToMoveTo = gameBoardService.GetTilesOnBoard()[currentX, emptyY];
                         M3_Tile oldTile = gameBoardService.GetTilesOnBoard()[currentX, y];

@@ -147,6 +147,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 335c23d361207164281b1d0d60e36d37, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tileSpriteRenderer: {fileID: 1498096870976436914}
   boardPosition: {x: 0, y: 0}
+  tileType: 0
   tileGamePiece: {fileID: 0}
   neighbourTiles: []

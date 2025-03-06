@@ -13,20 +13,20 @@ public class DevTestingScript : SerializeSingleton<DevTestingScript>
 
     void Start()
     {
+        //SpawnBoard();
         SpawnBoardWithJsonLevel();
     }
 
     [ContextMenu("SpawnRandomBoard")]
     public void SpawnBoard()
     {
-        boardController.InitialSpawnBoardTiles();
-        boardController.InitialSpawnRandomGamePicesOnTheBoard(ServiceRegistry.Get<M3_Service_BoardData>().GetTilesOnBoard());
+        boardController.SpawnBoard_Randomly(8,8);     
     }
 
    [ContextMenu("SpawnBoardFromLevelJson")]
     public void SpawnBoardWithJsonLevel()
     {
-        boardController.InitialSpawnBoardTiles_FromLevelJson(levelJson);
+        boardController.SpawnBoard_FromLevelJson(levelJson);
     }
 
     [ContextMenu("Find Match")]
