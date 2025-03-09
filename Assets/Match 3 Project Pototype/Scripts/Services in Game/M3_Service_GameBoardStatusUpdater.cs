@@ -72,6 +72,9 @@ namespace SNGames.M3
                     //3. Destroy the GamePiece
                     M3_VFXController.Instance.SpawnVFX("Match", gamePiece.transform.position, Quaternion.identity, Vector3.one);
 
+                    //4. Execute effect on the matches tile - Direct Impact
+                    gamePiece.CurrentGamePieceTile.DirectTileMatchImpact();
+
                     GameObject.Destroy(gamePiece.gameObject);
                 }
             }

@@ -7,6 +7,9 @@ namespace SNGames.CommonModule
     public class M3_BreakableTransparentTile : M3_Tile
     {
         [SerializeField] private GameObject visualElement;
+
+        [SerializeField] private int tileHealth;
+
         public override bool CanHoldNormalGamePiece()
         {
             return true;
@@ -15,6 +18,20 @@ namespace SNGames.CommonModule
         public override void SetTileVisuals()
         {
             visualElement.SetActive(true);
+        }
+
+        public void SetTileHealth(int tileHealth)
+        {
+            this.tileHealth = tileHealth;
+        }
+
+        public override void DirectTileMatchImpact()
+        {
+            tileHealth -= 1;
+            if(tileHealth <= 0)
+            {
+                visualElement.SetActive(false);
+            }
         }
     }
 }

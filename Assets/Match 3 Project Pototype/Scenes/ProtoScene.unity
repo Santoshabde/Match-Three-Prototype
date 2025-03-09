@@ -361,49 +361,60 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   boardController: {fileID: 497912127}
   levelJson: '{     "levelID": 3,     "levelName": "6x7 Randomized Level",     "width":
-    7,     "height": 6,     "levelTilesData": [         { "tileType": "InvisibleBlocked",
-    "boardPosition": [0, 0], "gamePiceType": "Orange" },         { "tileType": "Normal",
-    "boardPosition": [1, 0], "gamePiceType": "Purple" },         { "tileType": "Normal",
-    "boardPosition": [2, 0], "gamePiceType": "Green" },         { "tileType": "Normal",
-    "boardPosition": [3, 0], "gamePiceType": "Green" },         { "tileType": "Normal",
-    "boardPosition": [4, 0], "gamePiceType": "Purple" },         { "tileType": "Normal",
-    "boardPosition": [5, 0], "gamePiceType": "Purple" },         { "tileType": "InvisibleBlocked",
-    "boardPosition": [6, 0], "gamePiceType": "Purple" },          { "tileType": "Normal",
-    "boardPosition": [0, 1], "gamePiceType": "Green" },         { "tileType": "Normal",
-    "boardPosition": [1, 1], "gamePiceType": "Orange" },         { "tileType": "Normal",
-    "boardPosition": [2, 1], "gamePiceType": "Orange" },         { "tileType": "Normal",
+    7,     "height": 6,     "levelTilesData": [         { "tileType": "InvisibleBlocked","tileHealth":
+    -1, "boardPosition": [0, 0], "gamePiceType": "Orange" },         { "tileType":
+    "Normal", "tileHealth": -1, "boardPosition": [1, 0], "gamePiceType": "Purple"
+    },         { "tileType": "Normal", "tileHealth": -1, "boardPosition": [2, 0],
+    "gamePiceType": "Green" },         { "tileType": "Normal", "tileHealth": -1,"boardPosition":
+    [3, 0], "gamePiceType": "Green" },         { "tileType": "Normal", "tileHealth":
+    -1,"boardPosition": [4, 0], "gamePiceType": "Purple" },         { "tileType":
+    "Normal", "tileHealth": -1,"boardPosition": [5, 0], "gamePiceType": "Purple"
+    },         { "tileType": "InvisibleBlocked", "tileHealth": -1,"boardPosition":
+    [6, 0], "gamePiceType": "Purple" },          { "tileType": "Normal", "tileHealth":
+    -1,"boardPosition": [0, 1], "gamePiceType": "Green" },         { "tileType":
+    "Normal", "tileHealth": -1,"boardPosition": [1, 1], "gamePiceType": "Orange"
+    },         { "tileType": "Normal","tileHealth": -1, "boardPosition": [2, 1],
+    "gamePiceType": "Orange" },         { "tileType": "Normal", "tileHealth": -1,
     "boardPosition": [3, 1], "gamePiceType": "Green" },         { "tileType": "Normal",
-    "boardPosition": [4, 1], "gamePiceType": "Orange" },         { "tileType": "Normal",
-    "boardPosition": [5, 1], "gamePiceType": "Purple" },         { "tileType": "Normal",
-    "boardPosition": [6, 1], "gamePiceType": "Yellow" },          { "tileType": "Normal",
-    "boardPosition": [0, 2], "gamePiceType": "Purple" },         { "tileType": "Normal",
-    "boardPosition": [1, 2], "gamePiceType": "Blue" },         { "tileType": "Normal",
-    "boardPosition": [2, 2], "gamePiceType": "Purple" },         { "tileType": "TransparentBreakable",
-    "boardPosition": [3, 2], "gamePiceType": "Blue" },         { "tileType": "Normal",
-    "boardPosition": [4, 2], "gamePiceType": "Orange" },         { "tileType": "Normal",
-    "boardPosition": [5, 2], "gamePiceType": "Orange" },         { "tileType": "Normal",
-    "boardPosition": [6, 2], "gamePiceType": "Purple" },          { "tileType": "Normal",
-    "boardPosition": [0, 3], "gamePiceType": "Green" },         { "tileType": "Normal",
-    "boardPosition": [1, 3], "gamePiceType": "Blue" },         { "tileType": "Normal",
-    "boardPosition": [2, 3], "gamePiceType": "Orange" },         { "tileType": "Normal",
-    "boardPosition": [3, 3], "gamePiceType": "Purple" },         { "tileType": "Normal",
-    "boardPosition": [4, 3], "gamePiceType": "Red" },         { "tileType": "Normal",
-    "boardPosition": [5, 3], "gamePiceType": "Yellow" },         { "tileType": "Normal",
-    "boardPosition": [6, 3], "gamePiceType": "Green" },          { "tileType": "Normal",
-    "boardPosition": [0, 4], "gamePiceType": "Blue" },         { "tileType": "Normal",
-    "boardPosition": [1, 4], "gamePiceType": "Red" },         { "tileType": "Normal",
-    "boardPosition": [2, 4], "gamePiceType": "Purple" },         { "tileType": "Normal",
-    "boardPosition": [3, 4], "gamePiceType": "Yellow" },         { "tileType": "Normal",
-    "boardPosition": [4, 4], "gamePiceType": "Orange" },         { "tileType": "Normal",
-    "boardPosition": [5, 4], "gamePiceType": "Green" },         { "tileType": "Normal",
-    "boardPosition": [6, 4], "gamePiceType": "Blue" },          { "tileType": "InvisibleBlocked",
-    "boardPosition": [0, 5], "gamePiceType": "Orange" },         { "tileType": "Normal",
-    "boardPosition": [1, 5], "gamePiceType": "Purple" },         { "tileType": "Normal",
-    "boardPosition": [2, 5], "gamePiceType": "Green" },         { "tileType": "Normal",
-    "boardPosition": [3, 5], "gamePiceType": "Red" },         { "tileType": "Normal",
-    "boardPosition": [4, 5], "gamePiceType": "Yellow" },         { "tileType": "Normal",
-    "boardPosition": [5, 5], "gamePiceType": "Blue" },         { "tileType": "InvisibleBlocked",
-    "boardPosition": [6, 5], "gamePiceType": "Orange" }     ] } '
+    "tileHealth": -1,"boardPosition": [4, 1], "gamePiceType": "Orange" },        
+    { "tileType": "Normal", "tileHealth": -1,"boardPosition": [5, 1], "gamePiceType":
+    "Purple" },         { "tileType": "Normal", "tileHealth": -1,"boardPosition":
+    [6, 1], "gamePiceType": "Yellow" },          { "tileType": "Normal", "tileHealth":
+    -1,"boardPosition": [0, 2], "gamePiceType": "Purple" },         { "tileType":
+    "Normal", "tileHealth": -1,"boardPosition": [1, 2], "gamePiceType": "Blue" },        
+    { "tileType": "Normal", "tileHealth": -1,"boardPosition": [2, 2], "gamePiceType":
+    "Purple" },         { "tileType": "TransparentBreakable", "tileHealth": 1,"boardPosition":
+    [3, 2], "gamePiceType": "Blue" },         { "tileType": "Normal", "tileHealth":
+    -1,"boardPosition": [4, 2], "gamePiceType": "Orange" },         { "tileType":
+    "Normal", "tileHealth": -1,"boardPosition": [5, 2], "gamePiceType": "Orange"
+    },         { "tileType": "Normal", "tileHealth": -1,"boardPosition": [6, 2],
+    "gamePiceType": "Purple" },          { "tileType": "Normal", "tileHealth": -1,"boardPosition":
+    [0, 3], "gamePiceType": "Green" },         { "tileType": "Normal", "tileHealth":
+    -1,"boardPosition": [1, 3], "gamePiceType": "Blue" },         { "tileType": "Normal",
+    "tileHealth": -1,"boardPosition": [2, 3], "gamePiceType": "Orange" },        
+    { "tileType": "Normal", "tileHealth": -1,"boardPosition": [3, 3], "gamePiceType":
+    "Purple" },         { "tileType": "Normal", "tileHealth": -1,"boardPosition":
+    [4, 3], "gamePiceType": "Red" },         { "tileType": "Normal", "tileHealth":
+    -1,"boardPosition": [5, 3], "gamePiceType": "Yellow" },         { "tileType":
+    "Normal", "tileHealth": -1,"boardPosition": [6, 3], "gamePiceType": "Green" },         
+    { "tileType": "Normal", "tileHealth": -1,"boardPosition": [0, 4], "gamePiceType":
+    "Blue" },         { "tileType": "Normal", "tileHealth": -1,"boardPosition": [1,
+    4], "gamePiceType": "Red" },         { "tileType": "Normal", "tileHealth": -1,"boardPosition":
+    [2, 4], "gamePiceType": "Purple" },         { "tileType": "TransparentBreakable",
+    "tileHealth": 1,"boardPosition": [3, 4], "gamePiceType": "Yellow" },        
+    { "tileType": "Normal", "tileHealth": -1,"boardPosition": [4, 4], "gamePiceType":
+    "Orange" },         { "tileType": "Normal", "tileHealth": -1,"boardPosition":
+    [5, 4], "gamePiceType": "Green" },         { "tileType": "Normal", "tileHealth":
+    -1,"boardPosition": [6, 4], "gamePiceType": "Blue" },          { "tileType":
+    "InvisibleBlocked", "tileHealth": -1,"boardPosition": [0, 5], "gamePiceType":
+    "Orange" },         { "tileType": "Normal","tileHealth": -1, "boardPosition":
+    [1, 5], "gamePiceType": "Purple" },         { "tileType": "Normal", "tileHealth":
+    -1,"boardPosition": [2, 5], "gamePiceType": "Green" },         { "tileType":
+    "Normal", "tileHealth": -1,"boardPosition": [3, 5], "gamePiceType": "Red" },        
+    { "tileType": "Normal", "tileHealth": -1,"boardPosition": [4, 5], "gamePiceType":
+    "Yellow" },         { "tileType": "Normal", "tileHealth": -1,"boardPosition":
+    [5, 5], "gamePiceType": "Blue" },         { "tileType": "InvisibleBlocked", "tileHealth":
+    -1,"boardPosition": [6, 5], "gamePiceType": "Orange" }     ] } '
   xToStartMatchFinding: 0
   yToStartMatchFinding: 0
 --- !u!1 &619394800

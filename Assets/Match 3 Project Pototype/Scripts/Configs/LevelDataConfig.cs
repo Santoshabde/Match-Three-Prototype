@@ -24,6 +24,7 @@ namespace SNGames.M3
     public class LevelTileData
     {
         public string tileType;
+        public int tileHealth;
         public float[] boardPosition; // Use an array to match JSON structure
         public GamePiceType gamePiceType;
 

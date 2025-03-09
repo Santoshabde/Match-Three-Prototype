@@ -67,6 +67,12 @@ namespace SNGames.M3
                     tile.SetTileVisuals();
                     tilesOnBoard[xPos, yPos] = tile;
 
+                    // Set tile health if it's a breakable tile
+                    if (tile is M3_BreakableTransparentTile breakableTile)
+                    {
+                        breakableTile.SetTileHealth(tileData.tileHealth);
+                    }
+
                     tile.OnTileClicked += ServiceRegistry.Get<M3_Service_GamePieceInput>().OnTileClicked;
                     tile.OnTileHovered += ServiceRegistry.Get<M3_Service_GamePieceInput>().OnTileHovered;
                 }

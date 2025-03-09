@@ -56,6 +56,8 @@ namespace SNGames.M3
 
         public abstract void SetTileVisuals();
 
+        public abstract void DirectTileMatchImpact();
+
         #endregion
 
         #region  Input Actions

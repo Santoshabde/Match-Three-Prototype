@@ -9,6 +9,11 @@ namespace SNGames.M3
             return true;
         }
 
+        public override void DirectTileMatchImpact()
+        {
+            
+        }
+
         public override void SetTileVisuals()
         {
             //Nothing as of now

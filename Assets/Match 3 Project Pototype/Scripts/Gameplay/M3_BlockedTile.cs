@@ -9,6 +9,11 @@ namespace SNGames.M3
             return false;
         }
 
+        public override void DirectTileMatchImpact()
+        {
+            
+        }
+
         public override void SetTileVisuals()
         {
             tileSpriteRenderer.color = new Color(tileSpriteRenderer.color.r, tileSpriteRenderer.color.g, tileSpriteRenderer.color.b, 0f);
